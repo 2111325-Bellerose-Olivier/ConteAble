@@ -17,7 +17,7 @@
 - [ ] CU-B05 - Générer les heures des employés en PDF
 - [ ] CU-A03 - Ajout heures travaillés
 
-#à faire
+# à faire
 - [ ] schéma BD
 - [ ] schéma de classe
 - [ ] schéma de cas d'utilisation
