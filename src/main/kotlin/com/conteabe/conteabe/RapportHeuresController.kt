@@ -1,5 +1,8 @@
 package com.conteabe.conteabe
 
+import com.conteabe.conteabe.dao.EmployeDAO
+import com.conteabe.conteabe.modele.Employe
+import com.conteabe.conteabe.service.ServiceBD
 import javafx.beans.binding.Bindings
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
@@ -16,7 +19,7 @@ import java.time.LocalDate
 import java.util.function.Predicate
 
 
-class RapportHeuresController {
+class RapportHeuresController(contexte: Contexte) : ControleurAbstrait(contexte) {
     @FXML
     private lateinit var beginDate: DatePicker
 
@@ -35,7 +38,9 @@ class RapportHeuresController {
     @FXML
     private lateinit var employees: ListView<Employee>
 
-    private lateinit var employeesList: ObservableList<Employee>
+    private lateinit var employeesList: FilteredList<Employee>
+
+    private var selectedEmploye: Employee? = null
 
     fun initialize() {
         initializeDates()
@@ -84,8 +89,14 @@ class RapportHeuresController {
     }
 
     private fun initializeEmployees() {
-        employeesList =
-            FXCollections.observableArrayList(arrayOf("Bonjour", "Allo").map { element -> Employee(element) })
+        employeesList = FilteredList<Employee>(
+            FXCollections.observableList(
+                EmployeDAO(
+                    contexte.services.getService<ServiceBD>() as ServiceBD
+                ).chargerTout().map { employe -> Employee(employe.nom + " " + employe.prenom) }
+            )
+        )
+
         val filteredEmployee = FilteredList(employeesList)
 
         filteredEmployee.predicateProperty().bind(
@@ -98,9 +109,10 @@ class RapportHeuresController {
         employees.setCellFactory(CheckBoxListCell.forListView
         { item -> item.selectedProperty() })
         employees.getSelectionModel().selectedItemProperty().addListener()
-        { _, oldValue, newValue ->
-            oldValue?.setSelected(false)
+        { _, _, newValue ->
+            selectedEmploye?.setSelected(false)
             newValue?.setSelected(true)
+            selectedEmploye = newValue
         }
 
         employees.items = filteredEmployee
