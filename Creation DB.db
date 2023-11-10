@@ -2,7 +2,7 @@ CREATE TABLE Client (
     id INT NOT NULL,
     nom varchar(255),
     prenom varchar(255),
-    courriel varchar(255)
+    courriel varchar(255),
     tel varchar(255),
     code_postal varchar(255),
     adresse varchar(255),
@@ -16,7 +16,7 @@ CREATE TABLE Dossier (
     id_client int NOT NULL,
     nom varchar(255),
     PRIMARY KEY (id),
-    CONSTRAINT fk_client FOREIGN KEY (id_client) FOREIGN KEY Client(id)
+    CONSTRAINT fk_client FOREIGN KEY (id_client) REFERENCES Client(id)
 );
 
 CREATE TABLE List_Tache (
