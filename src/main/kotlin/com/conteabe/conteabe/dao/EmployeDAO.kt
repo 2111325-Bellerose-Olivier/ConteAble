@@ -72,8 +72,23 @@ class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
         return employes
     }
 
-    override fun chargerParId(id: Int): Employe {
-        TODO("Not yet implemented")
+    override fun chargerParId(id: Int): Employe? {
+        val connexion = serviceBD.ouvrirConnexion()
+        val requete: PreparedStatement =
+            connexion.prepareStatement("SELECT id, nom, prenom, mdp, id_role, courriel FROM Employe where id = ?")
+        requete.setInt(1, id)
+        val resultats: ResultSet = requete.executeQuery()
+
+        val employe: Employe? = if (resultats.next()) Employe(
+            resultats.getInt("id"),
+            resultats.getString("nom"),
+            resultats.getString("prenom"),
+            resultats.getString("mdp"),
+            resultats.getInt("id_role"),
+            resultats.getString("courriel")
+        ) else null
+        serviceBD.fermerConnexion()
+        return employe
     }
 
 

@@ -39,5 +39,5 @@ abstract class DAOAbstraite<T>(serviceBD: ServiceBD) where T : Entite {
      * @param id l'identifiant de l'entité à charger.
      * @return l'entité chargée.
      */
-    abstract fun chargerParId(id: Int): T
+    abstract fun chargerParId(id: Int): T?
 }

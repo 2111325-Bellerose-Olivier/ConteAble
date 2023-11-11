@@ -13,6 +13,6 @@ import javafx.stage.Stage
  */
 class Contexte(stage: Stage) {
     val services: ConteneurService = ConteneurService()
-    var employeConnecte: Employe? = Employe(1, "Bob", "Perdu", "HASH", 1, "bob@gmail.com")
+    var employeConnecte: Employe? = null
     var stage: Stage = stage
 }
