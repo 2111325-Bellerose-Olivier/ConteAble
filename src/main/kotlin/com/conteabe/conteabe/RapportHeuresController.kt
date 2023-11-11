@@ -7,9 +7,9 @@ import javafx.beans.binding.Bindings
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.FXCollections
-import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
+import javafx.scene.control.Button
 import javafx.scene.control.DatePicker
 import javafx.scene.control.Label
 import javafx.scene.control.ListView
@@ -33,6 +33,9 @@ class RapportHeuresController(contexte: Contexte) : ControleurAbstrait(contexte)
     private lateinit var endValidation: Label
 
     @FXML
+    private lateinit var genere: Button
+
+    @FXML
     private lateinit var employeeFilter: TextField
 
     @FXML
@@ -40,11 +43,12 @@ class RapportHeuresController(contexte: Contexte) : ControleurAbstrait(contexte)
 
     private lateinit var employeesList: FilteredList<Employee>
 
-    private var selectedEmploye: Employee? = null
+    internal var selectedEmploye: Employee? = null
 
     fun initialize() {
         initializeDates()
         initializeEmployees()
+        updateGenerateEnabality()
     }
 
     private fun initializeDates() {
@@ -58,32 +62,34 @@ class RapportHeuresController(contexte: Contexte) : ControleurAbstrait(contexte)
         val endOfPreviousWeek = today.minusDays(diffVendredi)
         val startOfPreviousWeek = endOfPreviousWeek.minusDays(4)
 
-        beginDate.setValue(startOfPreviousWeek)
-        endDate.setValue(endOfPreviousWeek)
+        beginDate.value = startOfPreviousWeek
+        endDate.value = endOfPreviousWeek
 
 
         beginDate.valueProperty().addListener { _, _, newValue ->
             if (newValue != null) {
                 if (newValue.isBefore(endDate.value)) {
-                    beginValidation.setText("")
+                    beginValidation.text = ""
                 } else {
-                    beginValidation.setText("La date de debut est après la date de fin.")
+                    beginValidation.text = "La date de debut est après la date de fin."
                 }
+                updateGenerateEnabality()
             }
         }
         endDate.valueProperty().addListener { _, _, newValue ->
             if (newValue != null) {
                 if (beginDate.value.isBefore(newValue)) {
-                    beginValidation.setText("")
+                    beginValidation.text = ""
                 } else {
-                    beginValidation.setText("La date de debut est après la date de fin.")
+                    beginValidation.text = "La date de debut est après la date de fin."
                 }
 
                 if (newValue.isBefore(LocalDate.now())) {
-                    endValidation.setText("")
+                    endValidation.text = ""
                 } else {
-                    endValidation.setText("La date de fin n'est pas encore passée.")
+                    endValidation.text = "La date de fin n'est pas encore passée."
                 }
+                updateGenerateEnabality()
             }
         }
     }
@@ -93,7 +99,7 @@ class RapportHeuresController(contexte: Contexte) : ControleurAbstrait(contexte)
             FXCollections.observableList(
                 EmployeDAO(
                     contexte.services.getService<ServiceBD>() as ServiceBD
-                ).chargerTout().map { employe -> Employee(employe.nom + " " + employe.prenom) }
+                ).chargerTout().map { employe -> Employee(this, employe) }
             )
         )
 
@@ -106,13 +112,14 @@ class RapportHeuresController(contexte: Contexte) : ControleurAbstrait(contexte)
             )
         )
 
-        employees.setCellFactory(CheckBoxListCell.forListView
-        { item -> item.selectedProperty() })
-        employees.getSelectionModel().selectedItemProperty().addListener()
-        { _, _, newValue ->
-            selectedEmploye?.setSelected(false)
-            newValue?.setSelected(true)
-            selectedEmploye = newValue
+        employees.cellFactory = CheckBoxListCell.forListView()
+        { item -> item.selectedProperty() }
+        employees.selectionModel.selectedItemProperty().addListener()
+        { obemployee, _, _ ->
+            val employee = obemployee.value
+            employee ?: return@addListener
+            val value = !employee.isSelected()
+            employee.setSelected(value)
         }
 
         employees.items = filteredEmployee
@@ -120,22 +127,47 @@ class RapportHeuresController(contexte: Contexte) : ControleurAbstrait(contexte)
 
     private fun createFilterPredicate(filterText: String): Predicate<Employee> {
         return Predicate { item ->
-            filterText.isEmpty() || item.text.contains(filterText, ignoreCase = true)
+            filterText.isEmpty() || item.toString().contains(filterText, ignoreCase = true)
         }
+    }
+
+    internal fun updateGenerateEnabality() {
+        genere.isDisable = beginValidation.text != "" ||
+                endValidation.text != "" ||
+                getEmploye() == null
+    }
+
+    private fun getEmploye(): Employe? {
+        val employe: Employee? = selectedEmploye
+        employe ?: return null
+        if (!employees.items.contains(employe))
+            return null
+        return employe.employe
     }
 
     @FXML
     private fun generate() {
-
+        val employe: Employe = getEmploye() ?: return
+        TODO("creation du PDF")
     }
 }
 
 
-class Employee(val text: String) {
+class Employee(private val controller: RapportHeuresController, val employe: Employe) {
     private val selected: BooleanProperty
 
     init {
         selected = SimpleBooleanProperty(false)
+        selected.addListener { _, _, newValue ->
+            if (newValue) {
+                controller.selectedEmploye?.setSelected(false)
+                controller.selectedEmploye = this
+            } else {
+                controller.selectedEmploye = null
+            }
+
+            controller.updateGenerateEnabality()
+        }
     }
 
     fun selectedProperty(): BooleanProperty {
@@ -151,6 +183,6 @@ class Employee(val text: String) {
     }
 
     override fun toString(): String {
-        return text
+        return employe.nom + " " + employe.prenom
     }
 }
