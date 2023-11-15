@@ -12,7 +12,7 @@ import javafx.scene.control.TableView
 import javafx.scene.control.cell.PropertyValueFactory
 import java.util.function.Predicate
 
-class HelloController(contexte: Contexte) : ControleurAbstrait(contexte) {
+class HelloController(private val contexte: Contexte) {
     @FXML
     private lateinit var welcomeText: Label
 

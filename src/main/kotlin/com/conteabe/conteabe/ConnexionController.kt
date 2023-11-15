@@ -10,7 +10,7 @@ import javafx.scene.control.Label
 import javafx.scene.control.TextField
 
 
-class ConnexionController(contexte: Contexte) : ControleurAbstrait(contexte) {
+class ConnexionController(private val contexte: Contexte) {
 
     @FXML
     private lateinit var validation: Label
@@ -44,10 +44,6 @@ class ConnexionController(contexte: Contexte) : ControleurAbstrait(contexte) {
         }
 
         contexte.employeConnecte = employe
-
-        val chargeur = FXMLLoader(HelloApplication::class.java.getResource("hello-view.fxml"))
-        chargeur.setController(HelloController(contexte))
-        val parent : Parent = chargeur.load()
-        contexte.stage.scene.root = parent
+        contexte.SetPage(Page.Hello)
     }
 }
