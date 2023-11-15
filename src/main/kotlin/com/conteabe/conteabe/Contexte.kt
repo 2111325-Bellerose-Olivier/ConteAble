@@ -2,6 +2,8 @@ package com.conteabe.conteabe
 
 import com.conteabe.conteabe.modele.Employe
 import com.conteabe.conteabe.service.ConteneurService
+import javafx.fxml.FXMLLoader
+import javafx.scene.Parent
 import javafx.stage.Stage
 
 
@@ -11,8 +13,14 @@ import javafx.stage.Stage
  * @author Alexandre
  * @since 06/05/2023
  */
-class Contexte(stage: Stage) {
+class Contexte(private val stage: Stage) {
     val services: ConteneurService = ConteneurService()
-    var employeConnecte: Employe? = Employe(1, "Bob", "Perdu", "HASH", 1, "bob@gmail.com")
-    var stage: Stage = stage
+    var employeConnecte: Employe? = null
+
+    fun SetPage(page: Page) {
+        val chargeur = FXMLLoader(HelloApplication::class.java.getResource(page.view))
+        chargeur.setController(page.constructor.call(this))
+        val parent: Parent = chargeur.load()
+        stage.scene.root = parent
+    }
 }
