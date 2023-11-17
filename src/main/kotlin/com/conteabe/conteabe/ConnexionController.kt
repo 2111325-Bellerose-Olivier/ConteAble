@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
+import org.mindrot.jbcrypt.BCrypt
 
 
 class ConnexionController(private val contexte: Contexte) {
@@ -20,6 +21,11 @@ class ConnexionController(private val contexte: Contexte) {
 
     @FXML
     private lateinit var password: TextField
+
+    @FXML
+    private fun cree() {
+        contexte.SetPage(Page.CreationEmploye)
+    }
 
     @FXML
     private fun connecter() {
@@ -38,7 +44,7 @@ class ConnexionController(private val contexte: Contexte) {
             return
         }
 
-        if (employe.mdp != password.text) {
+        if (!BCrypt.checkpw(password.text, employe.mdp)) {
             validation.text = "Identifiant ou mot de pass invalide."
             return
         }

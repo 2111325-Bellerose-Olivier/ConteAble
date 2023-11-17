@@ -8,8 +8,9 @@ import javafx.stage.Stage
 
 class MainApplication : Application() {
     override fun start(stage: Stage) {
-        val chargeur = FXMLLoader(MainApplication::class.java.getResource("connexion.fxml"))
-        chargeur.setController(ConnexionController(Contexte(stage)))
+
+        val chargeur = FXMLLoader(MainApplication::class.java.getResource(Page.Connection.view))
+        chargeur.setController(Page.Connection.constructor.call(Contexte(stage)))
         val parent : Parent = chargeur.load()
 
 
@@ -19,6 +20,6 @@ class MainApplication : Application() {
     }
 }
 
-fun main(@Suppress("UNUSED_PARAMETER") args: Array<String>) {
+fun main(args: Array<String>) {
     Application.launch(MainApplication::class.java, *args)
 }

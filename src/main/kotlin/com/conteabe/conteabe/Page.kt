@@ -8,6 +8,10 @@ enum class Page(val view: String, val constructor: KFunction<*>) {
         "connexion.fxml",
         ConnexionController::class.primaryConstructor!!
     ),
+    CreationEmploye(
+        "creation-employe.fxml",
+        CreationEmployeController::class.primaryConstructor!!
+    ),
     Hello(
         "hello-view.fxml",
         HelloController::class.primaryConstructor!!
