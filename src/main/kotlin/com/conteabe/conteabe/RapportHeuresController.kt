@@ -19,7 +19,7 @@ import java.time.LocalDate
 import java.util.function.Predicate
 
 
-class RapportHeuresController(contexte: Contexte) : ControleurAbstrait(contexte) {
+class RapportHeuresController(private val contexte: Contexte) {
     @FXML
     private lateinit var beginDate: DatePicker
 

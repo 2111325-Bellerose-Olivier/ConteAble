@@ -27,7 +27,7 @@ class ServiceBD : IService {
         if (this::connexion.isInitialized && !connexion.isClosed) {
             fermerConnexion()
         }
-        connexion = DriverManager.getConnection("jdbc:sqlite:db_contable.sqlite")
+        connexion = DriverManager.getConnection("jdbc:sqlite:db_contable.db")
         return connexion
     }
 

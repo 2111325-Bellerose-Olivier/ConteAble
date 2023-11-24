@@ -44,6 +44,8 @@ dependencies {
   implementation("com.mysql:mysql-connector-j:8.0.33")
   implementation("org.xerial:sqlite-jdbc:3.43.0.0")
 
+  implementation("org.mindrot:jbcrypt:0.4")
+
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
