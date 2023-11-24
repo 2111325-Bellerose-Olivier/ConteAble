@@ -3,18 +3,20 @@ package com.conteabe.conteabe
 import com.conteabe.conteabe.dao.EmployeDAO
 import com.conteabe.conteabe.modele.Employe
 import com.conteabe.conteabe.service.ServiceBD
+import javafx.application.Application
 import javafx.beans.binding.Bindings
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.FXCollections
 import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
-import javafx.scene.control.Button
-import javafx.scene.control.DatePicker
-import javafx.scene.control.Label
-import javafx.scene.control.ListView
-import javafx.scene.control.TextField
+import javafx.fxml.FXMLLoader
+import javafx.print.PrinterJob
+import javafx.scene.Parent
+import javafx.scene.Scene
+import javafx.scene.control.*
 import javafx.scene.control.cell.CheckBoxListCell
+import javafx.stage.Stage
 import java.time.LocalDate
 import java.util.function.Predicate
 
@@ -148,7 +150,7 @@ class RapportHeuresController(private val contexte: Contexte) {
     @FXML
     private fun generate() {
         val employe: Employe = getEmploye() ?: return
-        TODO("creation du PDF")
+        contexte.PrintScreen(Page.__PrintHeuresEmploye, employe)
     }
 }
 

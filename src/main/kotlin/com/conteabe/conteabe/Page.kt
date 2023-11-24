@@ -15,5 +15,13 @@ enum class Page(val view: String, val constructor: KFunction<*>) {
     Hello(
         "hello-view.fxml",
         HelloController::class.primaryConstructor!!
+    ),
+    RapportHeures(
+        "rapport-heures.fxml",
+        RapportHeuresController::class.primaryConstructor!!
+    ),
+    __PrintHeuresEmploye(
+        "print-heures-employe.fxml",
+        PrintHeuresEmployeController::class.primaryConstructor!!
     )
 }
