@@ -9,11 +9,9 @@ import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
 import javafx.scene.control.*
 import javafx.scene.control.cell.PropertyValueFactory
-import java.lang.reflect.Field
 import java.util.function.Predicate
-import kotlin.properties.Delegates
 
-class EmployeController (private val contexte: Contexte) {
+class TacheController (private val contexte: Contexte) {
     @FXML
     private lateinit var welcomeText: Label
 
