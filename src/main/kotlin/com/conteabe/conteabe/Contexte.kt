@@ -3,9 +3,14 @@ package com.conteabe.conteabe
 import com.conteabe.conteabe.modele.Employe
 import com.conteabe.conteabe.service.ConteneurService
 import javafx.fxml.FXMLLoader
+import javafx.print.PageOrientation
+import javafx.print.Paper
+import javafx.print.Printer
+import javafx.print.Printer.MarginType
 import javafx.print.PrinterJob
 import javafx.scene.Parent
 import javafx.stage.Stage
+import javafx.stage.Window
 
 
 /**
@@ -30,26 +35,25 @@ class Contexte(private val stage: Stage) {
         val width = stage.width
         val height = stage.height
 
-        stage.width = 595.0
-        stage.height = 842.0
+        stage.width = Paper.A4.width + 50
+        stage.height = Paper.A4.height + 38
         SetPage(page, *args)
 
-        val result = print()
-
-        stage.width = width
-        stage.height = height
-        stage.scene.root = current_scene
-        return result
-    }
-
-    private fun print(): Boolean{
-        val job: PrinterJob = PrinterJob.createPrinterJob() ?: return false
-        if (!job.showPrintDialog(stage)) {
-            return false
+        try {
+            val job: PrinterJob = PrinterJob.createPrinterJob() ?: return false
+            if (!job.printPage(
+                    job.printerProperty().get().createPageLayout(
+                        Paper.A4, PageOrientation.PORTRAIT, 0.0, 0.0, 0.0, 0.0
+                    ), stage.scene.root
+                )
+            ) {
+                return false
+            }
+            return job.endJob()
+        } finally {
+            stage.width = width
+            stage.height = height
+            stage.scene.root = current_scene
         }
-        if (!job.printPage(stage.scene.root)) {
-            return false
-        }
-        return job.endJob()
     }
 }

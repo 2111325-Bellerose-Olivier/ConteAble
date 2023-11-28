@@ -2,8 +2,16 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<?import javafx.scene.text.Text?>
-<HBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
-    <Text fx:id="name"/>
+<HBox alignment="CENTER" spacing="20.0" prefWidth="645" prefHeight="880" xmlns="http://javafx.com/javafx/17.0.2-ea"
+      xmlns:fx="http://javafx.com/fxml/1">
+    <TableView fx:id="listeHeures">
+        <columns>
+            <TableColumn prefWidth="75.0" text="debut" fx:id="debuts" editable="false"/>
+            <TableColumn prefWidth="75.0" text="fin" fx:id="fins" editable="false"/>
+            <TableColumn prefWidth="75.0" text="duree" fx:id="durees" editable="false"/>
+            <TableColumn prefWidth="75.0" text="tache" fx:id="taches" editable="false"/>
+            <TableColumn prefWidth="75.0" text="taux" fx:id="tauxs" editable="false"/>
+            <TableColumn prefWidth="75.0" text="montant" fx:id="montants" editable="false"/>
+        </columns>
+    </TableView>
 </HBox>
