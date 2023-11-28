@@ -75,7 +75,7 @@ CREATE TABLE Tache_Dossier (
     id_tache int NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT fk_dossier FOREIGN KEY (id_dossier) REFERENCES Dossier(id),
-    CONSTRAINT fk_liste_tache FOREIGN KEY (id_tache) REFERENCES List_Tache(id)
+    CONSTRAINT fk_liste_tache FOREIGN KEY (id_tache) REFERENCES Liste_Tache(id)
  );
 
  CREATE TABLE Role (
