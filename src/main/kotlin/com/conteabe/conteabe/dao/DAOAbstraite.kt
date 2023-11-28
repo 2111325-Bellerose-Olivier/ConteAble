@@ -40,6 +40,4 @@ abstract class DAOAbstraite<T>(serviceBD: ServiceBD) where T : Entite {
      * @return l'entité chargée.
      */
     abstract fun chargerParId(id: Int): T?
-
-    abstract fun supprimer(id: Int): Boolean?
 }

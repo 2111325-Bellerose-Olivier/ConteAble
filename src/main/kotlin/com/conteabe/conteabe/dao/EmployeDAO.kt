@@ -4,7 +4,6 @@ import com.conteabe.conteabe.modele.Employe
 import com.conteabe.conteabe.service.ServiceBD
 import java.sql.PreparedStatement
 import java.sql.ResultSet
-import java.sql.SQLException
 import java.sql.Statement
 
 /**
@@ -90,22 +89,6 @@ class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
         ) else null
         serviceBD.fermerConnexion()
         return employe
-    }
-
-    override fun supprimer(id: Int): Boolean{
-        try {
-            val connexion = serviceBD.ouvrirConnexion()
-            val requete: PreparedStatement =
-                connexion.prepareStatement("DELETE FROM Employe WHERE id = ?")
-            requete.setInt(1, id)
-
-            val lignesAffectees = requete.executeUpdate()
-            serviceBD.fermerConnexion()
-
-            return lignesAffectees > 0
-        } catch (e: SQLException) {
-            return false
-        }
     }
 
 
