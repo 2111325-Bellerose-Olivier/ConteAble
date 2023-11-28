@@ -91,5 +91,8 @@ class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
         return employe
     }
 
+    override fun supprimer(id: Int): Boolean? {
+        return false;
+    }
 
 }
