@@ -12,9 +12,8 @@ import javafx.scene.control.TableView
 import javafx.scene.control.TextField
 import javafx.scene.control.cell.PropertyValueFactory
 import java.util.function.Predicate
-import kotlin.properties.Delegates
 
-class EmployeController (private val contexte: Contexte) {
+class TacheController (private val contexte: Contexte) {
     @FXML
     private lateinit var welcomeText: Label
 
