@@ -11,5 +11,9 @@ enum class Page(val view: String, val constructor: KFunction<*>) {
     Hello(
         "hello-view.fxml",
         HelloController::class.primaryConstructor!!
-    )
+    ),
+    Employe(
+        "employe.fxml",
+        EmployeController::class.primaryConstructor!!
+    ),
 }
