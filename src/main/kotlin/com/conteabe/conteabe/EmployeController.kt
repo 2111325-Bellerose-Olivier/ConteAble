@@ -3,14 +3,13 @@ package com.conteabe.conteabe
 import com.conteabe.conteabe.dao.EmployeDAO
 import com.conteabe.conteabe.modele.Employe
 import com.conteabe.conteabe.service.ServiceBD
+import com.sun.javafx.scene.control.IntegerField
 import javafx.collections.FXCollections
 import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
-import javafx.scene.control.Label
-import javafx.scene.control.TableColumn
-import javafx.scene.control.TableView
-import javafx.scene.control.TextField
+import javafx.scene.control.*
 import javafx.scene.control.cell.PropertyValueFactory
+import java.lang.reflect.Field
 import java.util.function.Predicate
 import kotlin.properties.Delegates
 
@@ -25,7 +24,7 @@ class EmployeController (private val contexte: Contexte) {
     private lateinit var idEmploye: TableColumn<Employe, Int>
 
     @FXML
-    private lateinit var idEmployes: TextField
+    private lateinit var idEmployes: IntegerField
 
     @FXML
     private lateinit var nomsEmploye: TableColumn<Employe, String>
@@ -64,8 +63,32 @@ class EmployeController (private val contexte: Contexte) {
 
     @FXML
     private fun supprimer() {
+        val selectedEmploye = listeEmployes.selectionModel.selectedItem
+        if (selectedEmploye != null) {
 
-        contexte.SetPage(Page.Hello)
+            val idToDelete = selectedEmploye.id
+            val confirmationDialog = Alert(Alert.AlertType.CONFIRMATION)
+            confirmationDialog.title = "Confirmation"
+            confirmationDialog.headerText = "Voulez-vous vraiment supprimer l'employée ${idToDelete}"
+
+            val result = confirmationDialog.showAndWait()
+
+            if (result.isPresent && result.get() == ButtonType.OK) {
+                if (idToDelete != null) {
+                    EmployeDAO(
+                        contexte.services.getService<ServiceBD>() as ServiceBD
+                    ).supprimer(idToDelete)
+                    listeEmployes.items.remove(selectedEmploye)
+                }
+            }
+
+        } else {
+            val confirmationDialog = Alert(Alert.AlertType.ERROR)
+            confirmationDialog.title = "ERREUR !!!"
+            confirmationDialog.headerText = "Veuillez sélectionner un élément dans le tableau plus haut en premier."
+            confirmationDialog.showAndWait()
+        }
+
     }
 
     @FXML
