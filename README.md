@@ -1,7 +1,7 @@
 # ConteAble
 | Code | Nom Cas |
 | ---- | ------- |
-[#f03c15]| **CU-B01** | **Gérer les employés** |
+![#f03c15]| **CU-B01** | **Gérer les employés** |
 [#f03c15]| CU-B01-A | Ajouter un employé |
 [#f03c15]| CU-B01-B | Modifier un employé |
 [#f03c15]| CU-B01-C | Supprimer un employé |
