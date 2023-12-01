@@ -15,12 +15,11 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 
-    <TableView fx:id="listeEmployes">
+    <TableView fx:id="listeTaches">
         <columns>
-            <TableColumn prefWidth="30.0" text="id" fx:id="idEmploye" editable="false"/>
-            <TableColumn prefWidth="75.0" text="nom" fx:id="nomsEmploye" editable="false"/>
-            <TableColumn prefWidth="75.0" text="prenom" fx:id="prenomsEmploye" editable="false"/>
-            <TableColumn prefWidth="75.0" text="courriel" fx:id="courrielsEmploye" editable="false"/>
+            <TableColumn prefWidth="30.0" text="id" fx:id="idTache" editable="false"/>
+            <TableColumn prefWidth="75.0" text="nom" fx:id="nomsTache" editable="false"/>
+            <TableColumn prefWidth="75.0" text="tauxHorraire" fx:id="tauxHorraire" editable="false"/>
         </columns>
     </TableView>
 
@@ -30,12 +29,5 @@
 
         <Label fx:id="Modifier"/>
         <Button text="Modifier" onAction="#modifier"/>
-
-        <VBox>
-            <Label fx:id="Supprimer"/>
-            <Button text="Supprimer" onAction="#supprimer"/>
-
-            <TextField fx:id="idEmployes"/>
-        </VBox>
     </HBox>
 </VBox>

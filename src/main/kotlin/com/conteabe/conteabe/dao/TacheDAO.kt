@@ -76,18 +76,6 @@ class TacheDAO(serviceBD: ServiceBD) : DAOAbstraite<Tache>(serviceBD) {
     }
 
     override fun supprimer(id: Int): Boolean{
-        try {
-            val connexion = serviceBD.ouvrirConnexion()
-            val requete: PreparedStatement =
-                connexion.prepareStatement("DELETE FROM Liste_Tache WHERE id = ?")
-            requete.setInt(1, id)
-
-            val lignesAffectees = requete.executeUpdate()
-            serviceBD.fermerConnexion()
-
-            return lignesAffectees > 0
-        } catch (e: SQLException) {
-            return false
-        }
+        return false;
     }
 }
