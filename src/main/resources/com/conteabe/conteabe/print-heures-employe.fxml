@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox alignment="CENTER" spacing="20.0" prefWidth="645" prefHeight="880" xmlns="http://javafx.com/javafx/17.0.2-ea"
+<VBox alignment="CENTER" spacing="20.0" prefWidth="595" prefHeight="842" xmlns="http://javafx.com/javafx/17.0.2-ea"
       xmlns:fx="http://javafx.com/fxml/1">
     <HBox alignment="CENTER" spacing="20.0">
         <Label fx:id="nomEmploye"/>
