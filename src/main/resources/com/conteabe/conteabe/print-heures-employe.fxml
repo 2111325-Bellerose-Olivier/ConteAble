@@ -2,8 +2,13 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<HBox alignment="CENTER" spacing="20.0" prefWidth="645" prefHeight="880" xmlns="http://javafx.com/javafx/17.0.2-ea"
+<VBox alignment="CENTER" spacing="20.0" prefWidth="645" prefHeight="880" xmlns="http://javafx.com/javafx/17.0.2-ea"
       xmlns:fx="http://javafx.com/fxml/1">
+    <HBox alignment="CENTER" spacing="20.0">
+        <Label fx:id="nomEmploye"/>
+        <Label fx:id="heureTotal"/>
+        <Label fx:id="montantTotal"/>
+    </HBox>
     <TableView fx:id="listeHeures">
         <columns>
             <TableColumn prefWidth="75.0" text="debut" fx:id="debuts" editable="false"/>
@@ -14,4 +19,4 @@
             <TableColumn prefWidth="75.0" text="montant" fx:id="montants" editable="false"/>
         </columns>
     </TableView>
-</HBox>
+</VBox>

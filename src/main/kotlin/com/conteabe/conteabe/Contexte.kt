@@ -41,6 +41,9 @@ class Contexte(private val stage: Stage) {
 
         try {
             val job: PrinterJob = PrinterJob.createPrinterJob() ?: return false
+            if (!job.showPrintDialog(stage)) {
+                return false
+            }
             if (!job.printPage(
                     job.printerProperty().get().createPageLayout(
                         Paper.A4, PageOrientation.PORTRAIT, 0.0, 0.0, 0.0, 0.0

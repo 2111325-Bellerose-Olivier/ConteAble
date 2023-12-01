@@ -3,6 +3,7 @@ package com.conteabe.conteabe
 import com.conteabe.conteabe.modele.Employe
 import javafx.collections.FXCollections
 import javafx.fxml.FXML
+import javafx.scene.control.Label
 import javafx.scene.control.TableColumn
 import javafx.scene.control.TableView
 import javafx.scene.control.cell.PropertyValueFactory
@@ -20,6 +21,15 @@ class PrintHeuresEmployeController(
     private val contexte: Contexte,
     private val employe: Employe
 ) {
+    @FXML
+    private lateinit var nomEmploye: Label
+
+    @FXML
+    private lateinit var heureTotal: Label
+
+    @FXML
+    private lateinit var montantTotal: Label
+
     @FXML
     private lateinit var listeHeures: TableView<Heure>
 
@@ -42,6 +52,10 @@ class PrintHeuresEmployeController(
     private lateinit var montants: TableColumn<Heure, String>
 
     fun initialize() {
+        nomEmploye.text = employe.nom
+        heureTotal.text = "1:00"
+        montantTotal.text = "4"
+        
         debuts.cellValueFactory = PropertyValueFactory("debut")
         fins.cellValueFactory = PropertyValueFactory("fin")
         durees.cellValueFactory = PropertyValueFactory("duree")
