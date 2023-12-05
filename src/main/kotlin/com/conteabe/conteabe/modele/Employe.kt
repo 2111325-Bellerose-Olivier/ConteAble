@@ -10,6 +10,6 @@ import com.conteabe.conteabe.dao.Entite
  * @author Alexandre
  * @since 06/05/2023
  */
-class Employe(id: Int?, var nom: String, var prenom: String,var codeEmploye: Int, var mdp: String, var id_role: Int, var courriel: String) :
+class Employe(id: Int?, var nom: String, var prenom: String, var mdp: String, var id_role: Int, var courriel: String) :
     Entite(id) {
 }

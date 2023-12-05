@@ -76,4 +76,8 @@ class RoleDAO(serviceBD: ServiceBD) : DAOAbstraite<Role>(serviceBD) {
         serviceBD.fermerConnexion()
         return employe
     }
+
+    override fun supprimer(id: Int): Boolean? {
+        TODO("Not yet implemented")
+    }
 }

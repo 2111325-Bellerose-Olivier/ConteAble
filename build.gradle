@@ -43,6 +43,7 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.21")
   implementation("com.mysql:mysql-connector-j:8.0.33")
   implementation("org.xerial:sqlite-jdbc:3.43.0.0")
+  implementation ("com.dlsc.formsfx:formsfx-core:11.3.2")
 
   implementation("org.mindrot:jbcrypt:0.4")
 

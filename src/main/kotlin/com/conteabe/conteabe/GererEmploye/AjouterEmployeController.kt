@@ -18,6 +18,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.util.converter.IntegerStringConverter;
 import java.net.URL;
 import java.util.ResourceBundle;
+import com.sun.javafx.scene.control.IntegerField
 
 /**
  * j'ai juste copié "CreationEmployeController" pour l'instant j'ai rien changé encore
@@ -32,9 +33,6 @@ class AjouterEmployeController(private val contexte: Contexte) {
 
     @FXML
     private lateinit var prenom: TextField
-
-    @FXML
-    private lateinit var code_employe: TextField
 
     @FXML
     private lateinit var courriel: TextField
@@ -68,7 +66,7 @@ class AjouterEmployeController(private val contexte: Contexte) {
         }
 
         val employe =
-            Employe(null, nom.text, prenom.text,code_employe.text.toInt(), BCrypt.hashpw(password.text, BCrypt.gensalt()), role_id, courriel.text)
+            Employe(null, nom.text, prenom.text, BCrypt.hashpw(password.text, BCrypt.gensalt()), role_id, courriel.text)
 
         EmployeDAO(
             contexte.services.getService<ServiceBD>() as ServiceBD

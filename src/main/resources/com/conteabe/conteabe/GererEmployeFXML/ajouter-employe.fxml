@@ -3,6 +3,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import com.sun.javafx.scene.control.IntegerField?>
 
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
     <padding>
@@ -12,10 +13,8 @@
     <Label fx:id="validation"/>
     <TextField fx:id="prenom" promptText="prenom"/>
     <TextField fx:id="nom" promptText="nom"/>
-    <TextField fx:id="code_employe" promptText="code_employe"/>
     <TextField fx:id="courriel" promptText="courriel"/>
     <ComboBox fx:id="role" promptText="role"/>
     <TextField fx:id="password" promptText="password"/>
-    <Hyperlink text="placeholder" onAction="#placeholder"/>
     <Button onAction="#ajouter" text="Cree!"/>
 </VBox>
