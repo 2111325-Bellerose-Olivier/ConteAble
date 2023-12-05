@@ -47,6 +47,8 @@ dependencies {
 
   implementation("org.mindrot:jbcrypt:0.4")
 
+  implementation("com.dlsc.formsfx:formsfx-core:11.3.2")
+
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }

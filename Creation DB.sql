@@ -32,12 +32,13 @@ CREATE TABLE List_Tache (
 );
 
 CREATE TABLE Tache_Dossier (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    id_dossier INTEGER,
-    id_tache INTEGER,
-    CONSTRAINT fk_dossier FOREIGN KEY (id_dossier) REFERENCES Dosser(id),
-    CONSTRAINT fk_liste_tache FOREIGN KEY (id_tache) REFERENCES List_Tache(id)
-);
+    id int NOT NULL,
+    id_dossier int NOT NULL,
+    id_tache int NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_dossier FOREIGN KEY (id_dossier) REFERENCES Dossier(id),
+    CONSTRAINT fk_liste_tache FOREIGN KEY (id_tache) REFERENCES Liste_Tache(id)
+ );
 
 CREATE TABLE Role (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
