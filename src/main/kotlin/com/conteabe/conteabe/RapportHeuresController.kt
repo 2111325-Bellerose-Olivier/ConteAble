@@ -3,42 +3,36 @@ package com.conteabe.conteabe
 import com.conteabe.conteabe.dao.EmployeDAO
 import com.conteabe.conteabe.modele.Employe
 import com.conteabe.conteabe.service.ServiceBD
-import javafx.application.Application
 import javafx.beans.binding.Bindings
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.FXCollections
 import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
-import javafx.fxml.FXMLLoader
-import javafx.print.PrinterJob
-import javafx.scene.Parent
-import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.control.cell.CheckBoxListCell
-import javafx.stage.Stage
 import java.time.LocalDate
 import java.util.function.Predicate
 
 
 class RapportHeuresController(private val contexte: Contexte) {
     @FXML
-    private lateinit var beginDate: DatePicker
+    private lateinit var dateDebut: DatePicker
 
     @FXML
-    private lateinit var beginValidation: Label
+    private lateinit var validationDebut: Label
 
     @FXML
-    private lateinit var endDate: DatePicker
+    private lateinit var dateFin: DatePicker
 
     @FXML
-    private lateinit var endValidation: Label
+    private lateinit var validationFin: Label
 
     @FXML
     private lateinit var genere: Button
 
     @FXML
-    private lateinit var employeeFilter: TextField
+    private lateinit var filtreIdEmployee: TextField
 
     @FXML
     private lateinit var employees: ListView<Employee>
@@ -54,42 +48,42 @@ class RapportHeuresController(private val contexte: Contexte) {
     }
 
     private fun initializeDates() {
-        val today = LocalDate.now()
-        var diffVendredi = (today.dayOfWeek.value.toLong() + 2) % 7
+        val aujourdhui = LocalDate.now()
 
-        if (diffVendredi == 0L) {//Si vendredi prendre le vendredi passé
-            diffVendredi = 7
+        var jourApresVendredi = (aujourdhui.dayOfWeek.value + 2) % 7
+        if (jourApresVendredi == 0) { // Si vendredi, prendre le vendredi passé
+            jourApresVendredi = 7
         }
 
-        val endOfPreviousWeek = today.minusDays(diffVendredi)
+        val endOfPreviousWeek = aujourdhui.minusDays(jourApresVendredi.toLong())
         val startOfPreviousWeek = endOfPreviousWeek.minusDays(4)
 
-        beginDate.value = startOfPreviousWeek
-        endDate.value = endOfPreviousWeek
+        dateDebut.value = startOfPreviousWeek
+        dateFin.value = endOfPreviousWeek
 
 
-        beginDate.valueProperty().addListener { _, _, newValue ->
+        dateDebut.valueProperty().addListener { _, _, newValue ->
             if (newValue != null) {
-                if (newValue.isBefore(endDate.value)) {
-                    beginValidation.text = ""
+                if (newValue.isBefore(dateFin.value)) {
+                    validationDebut.text = ""
                 } else {
-                    beginValidation.text = "La date de debut est après la date de fin."
+                    validationDebut.text = "La date de debut est après la date de fin."
                 }
                 updateGenerateEnabality()
             }
         }
-        endDate.valueProperty().addListener { _, _, newValue ->
+        dateFin.valueProperty().addListener { _, _, newValue ->
             if (newValue != null) {
-                if (beginDate.value.isBefore(newValue)) {
-                    beginValidation.text = ""
+                if (dateDebut.value.isBefore(newValue)) {
+                    validationDebut.text = ""
                 } else {
-                    beginValidation.text = "La date de debut est après la date de fin."
+                    validationDebut.text = "La date de debut est après la date de fin."
                 }
 
                 if (newValue.isBefore(LocalDate.now())) {
-                    endValidation.text = ""
+                    validationFin.text = ""
                 } else {
-                    endValidation.text = "La date de fin n'est pas encore passée."
+                    validationFin.text = "La date de fin n'est pas encore passée."
                 }
                 updateGenerateEnabality()
             }
@@ -109,37 +103,36 @@ class RapportHeuresController(private val contexte: Contexte) {
 
         filteredEmployee.predicateProperty().bind(
             Bindings.createObjectBinding(
-                { createFilterPredicate(employeeFilter.text) },
-                employeeFilter.textProperty()
+                { predicatFiltreEmploye(filtreIdEmployee.text) },
+                filtreIdEmployee.textProperty()
             )
         )
 
         employees.cellFactory = CheckBoxListCell.forListView()
         { item -> item.selectedProperty() }
         employees.selectionModel.selectedItemProperty().addListener()
-        { obemployee, _, _ ->
-            val employee = obemployee.value
+        { observedEmlpoye, _, _ ->
+            val employee = observedEmlpoye.value
             employee ?: return@addListener
-            val value = !employee.isSelected()
-            employee.setSelected(value)
+            employee.setSelected(!employee.isSelected())
         }
 
         employees.items = filteredEmployee
     }
 
-    private fun createFilterPredicate(filterText: String): Predicate<Employee> {
+    private fun predicatFiltreEmploye(textFiltre: String): Predicate<Employee> {
         return Predicate { item ->
-            filterText.isEmpty() || item.toString().contains(filterText, ignoreCase = true)
+            textFiltre.isEmpty() || item.toString().contains(textFiltre, ignoreCase = true)
         }
     }
 
     internal fun updateGenerateEnabality() {
-        genere.isDisable = beginValidation.text != "" ||
-                endValidation.text != "" ||
-                getEmploye() == null
+        genere.isDisable = validationDebut.text != "" ||
+                validationFin.text != "" ||
+                employeSelectionne() == null
     }
 
-    private fun getEmploye(): Employe? {
+    private fun employeSelectionne(): Employe? {
         val employe: Employee? = selectedEmploye
         employe ?: return null
         if (!employees.items.contains(employe))
@@ -149,7 +142,7 @@ class RapportHeuresController(private val contexte: Contexte) {
 
     @FXML
     private fun generate() {
-        val employe: Employe = getEmploye() ?: return
+        val employe: Employe = employeSelectionne() ?: return
         contexte.PrintScreen(Page.__PrintHeuresEmploye, employe)
     }
 }
@@ -161,13 +154,8 @@ class Employee(private val controller: RapportHeuresController, val employe: Emp
     init {
         selected = SimpleBooleanProperty(false)
         selected.addListener { _, _, newValue ->
-            if (newValue) {
-                controller.selectedEmploye?.setSelected(false)
-                controller.selectedEmploye = this
-            } else {
-                controller.selectedEmploye = null
-            }
-
+            controller.selectedEmploye?.setSelected(false)
+            controller.selectedEmploye = if (newValue) this else null
             controller.updateGenerateEnabality()
         }
     }
