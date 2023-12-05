@@ -23,17 +23,21 @@ class RoleDAO(serviceBD: ServiceBD) : DAOAbstraite<Role>(serviceBD) {
         val connexion = serviceBD.ouvrirConnexion()
         val estInsertion: Boolean = entite.id == null
 
-        val requete: PreparedStatement = if (estInsertion) {
-            connexion.prepareStatement(
+        val requete: PreparedStatement
+        if (estInsertion) {
+            requete = connexion.prepareStatement(
                 "INSERT INTO Role (nom) VALUES (?)"
             )
         } else {
-            connexion.prepareStatement("UPDATE Role SET nom = ?")
+            requete = connexion.prepareStatement("UPDATE Role SET nom = ? WHERE id = ?")
+            requete.setInt(2, entite.id!!)
         }
 
         requete.setString(1, entite.nom)
 
-        if (requete.executeUpdate() > 0) {
+        val requeteReussi = requete.executeUpdate() > 0
+
+        if (requeteReussi && estInsertion) {
             val rowId = connexion.prepareStatement("SELECT last_insert_rowid()").executeQuery()
             rowId.next()
             entite.id = rowId.getInt(1)
@@ -75,5 +79,9 @@ class RoleDAO(serviceBD: ServiceBD) : DAOAbstraite<Role>(serviceBD) {
         ) else null
         serviceBD.fermerConnexion()
         return employe
+    }
+
+    override fun supprimer(id: Int): Boolean? {
+        return false;
     }
 }

@@ -13,21 +13,23 @@ class TacheDAO(serviceBD: ServiceBD) : DAOAbstraite<Tache>(serviceBD) {
         val connexion = serviceBD.ouvrirConnexion()
         val estInsertion: Boolean = entite.id == null
 
-        var requete: PreparedStatement = if (estInsertion) {
-            connexion.prepareStatement(
+        val requete: PreparedStatement
+        if (estInsertion) {
+            requete = connexion.prepareStatement(
                 "INSERT INTO List_Tache (nom, tauxHorraire) VALUES (?, ?);",
                 Statement.RETURN_GENERATED_KEYS
             )
         } else {
-            connexion.prepareStatement("UPDATE List_Tache SET nom = ?, taucHorraire = ?")
+            requete = connexion.prepareStatement("UPDATE List_Tache SET nom = ?, taucHorraire = ? WHERE id = ?")
+            requete.setInt(3, entite.id!!)
         }
 
         requete.setString(1, entite.nom)
         requete.setFloat(2, entite.taucHorraire)
 
-        requete.executeUpdate()
+        val requeteReussi = requete.executeUpdate() > 0
 
-        if (estInsertion) {
+        if (requeteReussi && estInsertion) {
             val cleGenere: ResultSet = requete.generatedKeys
 
             if (cleGenere.next()) {
