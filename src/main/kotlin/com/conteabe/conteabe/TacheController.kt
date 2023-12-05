@@ -6,10 +6,11 @@ import com.conteabe.conteabe.modele.Dossier
 import com.conteabe.conteabe.modele.Employe
 import com.conteabe.conteabe.modele.Tache
 import com.conteabe.conteabe.service.ServiceBD
+import com.sun.javafx.scene.control.DoubleField
+import com.sun.javafx.scene.control.IntegerField
 import javafx.collections.FXCollections
 import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
-import javafx.scene.control.Label
 import javafx.scene.control.TableColumn
 import javafx.scene.control.TableView
 import javafx.scene.control.TextField
@@ -44,6 +45,15 @@ class TacheController (private val contexte: Contexte) {
     @FXML
     private lateinit var nomDossier: TableColumn<Employe, String>
 
+    @FXML
+    private lateinit var tauxHorraireAjout: DoubleField
+
+    @FXML
+    private lateinit var idDossierAjout: IntegerField
+
+    @FXML
+    private lateinit var nomDossierAjout: TextField
+
     private lateinit var dossiers: FilteredList<Dossier>
 
     fun initialize() {
@@ -74,13 +84,20 @@ class TacheController (private val contexte: Contexte) {
 
         dossiers.predicate = Predicate { true }
         taches.predicate = Predicate { true }
+
         listeTaches.items = taches
         listeDossier.items = dossiers
     }
 
     @FXML
     private fun ajouter() {
-        contexte.SetPage(Page.Hello)
+        val taux = tauxHorraireAjout.value.toFloat()
+        val dossier = idDossierAjout.value
+        val nom = nomDossierAjout.text
+
+        TacheDAO(
+            contexte.services.getService<ServiceBD>() as ServiceBD
+        ).enregistrer(Tache(null, nom, taux))
     }
 
     @FXML
