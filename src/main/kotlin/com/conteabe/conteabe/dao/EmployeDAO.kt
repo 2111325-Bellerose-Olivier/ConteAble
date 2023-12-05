@@ -88,4 +88,9 @@ class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
         serviceBD.fermerConnexion()
         return employe
     }
+
+    override fun supprimer(id: Int): Boolean? {
+        return false;
+    }
+
 }

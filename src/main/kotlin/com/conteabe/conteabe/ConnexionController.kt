@@ -50,6 +50,6 @@ class ConnexionController(private val contexte: Contexte) {
         }
 
         contexte.employeConnecte = employe
-        contexte.SetPage(Page.RapportHeures)
+        contexte.SetPage(Page.Employe)
     }
 }
