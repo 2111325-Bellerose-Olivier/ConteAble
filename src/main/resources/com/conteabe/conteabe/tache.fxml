@@ -10,7 +10,16 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx">
+
+    <ImageView>
+        <image>
+            <Image url="@Logo.jpg"/>
+        </image>
+    </ImageView>
+
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
@@ -20,6 +29,14 @@
             <TableColumn prefWidth="30.0" text="id" fx:id="idTache" editable="false"/>
             <TableColumn prefWidth="75.0" text="nom" fx:id="nomsTache" editable="false"/>
             <TableColumn prefWidth="75.0" text="tauxHorraire" fx:id="tauxHorraire" editable="false"/>
+        </columns>
+    </TableView>
+
+    <TableView fx:id="listeDossier">
+        <columns>
+            <TableColumn prefWidth="30.0" text="id" fx:id="idDossier" editable="false"/>
+            <TableColumn prefWidth="75.0" text="client" fx:id="idClient" editable="false"/>
+            <TableColumn prefWidth="75.0" text="nom" fx:id="nomDossier" editable="false"/>
         </columns>
     </TableView>
 

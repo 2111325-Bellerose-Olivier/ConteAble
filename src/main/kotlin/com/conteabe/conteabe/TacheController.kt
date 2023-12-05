@@ -1,7 +1,8 @@
 package com.conteabe.conteabe
 
-import com.conteabe.conteabe.dao.EmployeDAO
+import com.conteabe.conteabe.dao.DossierDAO
 import com.conteabe.conteabe.dao.TacheDAO
+import com.conteabe.conteabe.modele.Dossier
 import com.conteabe.conteabe.modele.Employe
 import com.conteabe.conteabe.modele.Tache
 import com.conteabe.conteabe.service.ServiceBD
@@ -31,10 +32,32 @@ class TacheController (private val contexte: Contexte) {
 
     private lateinit var taches: FilteredList<Tache>
 
+    @FXML
+    private lateinit var listeDossier: TableView<Dossier>
+
+    @FXML
+    private lateinit var idDossier: TableColumn<Employe, Int>
+
+    @FXML
+    private lateinit var idClient: TableColumn<Employe, Int>
+
+    @FXML
+    private lateinit var nomDossier: TableColumn<Employe, String>
+
+    private lateinit var dossiers: FilteredList<Dossier>
+
     fun initialize() {
         taches = FilteredList<Tache>(
             FXCollections.observableList(
                 TacheDAO(
+                    contexte.services.getService<ServiceBD>() as ServiceBD
+                ).chargerTout()
+            )
+        )
+
+        dossiers = FilteredList<Dossier>(
+            FXCollections.observableList(
+                DossierDAO(
                     contexte.services.getService<ServiceBD>() as ServiceBD
                 ).chargerTout()
             )
@@ -45,8 +68,14 @@ class TacheController (private val contexte: Contexte) {
         nomsTache.cellValueFactory = PropertyValueFactory("nom")
         tauxHorraire.cellValueFactory = PropertyValueFactory("tauxHorraire")
 
+        idDossier.cellValueFactory = PropertyValueFactory("id")
+        nomDossier.cellValueFactory = PropertyValueFactory("nom")
+        idClient.cellValueFactory = PropertyValueFactory("id_client")
+
+        dossiers.predicate = Predicate { true }
         taches.predicate = Predicate { true }
         listeTaches.items = taches
+        listeDossier.items = dossiers
     }
 
     @FXML
