@@ -1,7 +1,5 @@
 package com.conteabe.conteabe
 
-import com.conteabe.conteabe.dao.EmployeDAO
-import com.conteabe.conteabe.modele.Employe
 import com.conteabe.conteabe.service.ServiceBD
 import javafx.collections.FXCollections
 import javafx.collections.transformation.FilteredList

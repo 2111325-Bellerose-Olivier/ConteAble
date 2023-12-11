@@ -1,6 +1,5 @@
 package com.conteabe.conteabe
 
-import com.conteabe.conteabe.modele.Employe
 import com.conteabe.conteabe.service.ConteneurService
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
