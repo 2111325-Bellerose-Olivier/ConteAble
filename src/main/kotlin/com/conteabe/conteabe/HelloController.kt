@@ -6,6 +6,7 @@ import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
 import javafx.scene.control.Label
 import javafx.scene.control.TableColumn
+import javafx.scene.control.TableRow
 import javafx.scene.control.TableView
 import javafx.scene.control.cell.PropertyValueFactory
 import java.util.function.Predicate
@@ -44,6 +45,16 @@ class HelloController(private val contexte: Contexte) {
 
         employes.predicate = Predicate { true }
         listeEmployes.items = employes
+        listeEmployes.setRowFactory { tv ->
+            val row = TableRow<Employe>()
+            row.setOnMouseClicked { event ->
+                if (event.clickCount == 2 && !row.isEmpty) {
+                    val employe: Employe = row.item
+                    // TODO aller dans la page de l'employe
+                }
+            }
+            row
+        }
     }
 
     @FXML

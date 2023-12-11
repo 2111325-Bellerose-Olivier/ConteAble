@@ -41,4 +41,8 @@ abstract class DAOAbstraite<T>(serviceBD: ServiceBD) where T : Entite {
      */
     abstract fun chargerParId(id: Int): T?
 
+<<<<<<< HEAD
+=======
+    abstract fun supprimer(id: Int): Boolean?
+>>>>>>> dev
 }
