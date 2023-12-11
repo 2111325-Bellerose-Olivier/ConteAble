@@ -18,7 +18,7 @@
   <TableView fx:id="listeEmployes">
     <columns>
       <TableColumn prefWidth="75.0" text="nom" fx:id="nomsEmploye" editable="false"/>
-      <TableColumn prefWidth="75.0" text="prenom" fx:id="prenomsEmploye" editable="false"/>
+      <TableColumn prefWidth="75.0" text="prenom" fx:id="preno msEmploye" editable="false"/>
       <TableColumn prefWidth="75.0" text="courriel" fx:id="courrielsEmploye" editable="false"/>
     </columns>
   </TableView>

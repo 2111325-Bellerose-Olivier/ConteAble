@@ -1,5 +1,4 @@
 package com.conteabe.conteabe.modele
-
 import com.conteabe.conteabe.dao.Entite
 
 class ClientCompagnie (
