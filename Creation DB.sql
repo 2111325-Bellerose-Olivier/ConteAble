@@ -10,28 +10,25 @@ DROP TABLE IF EXISTS ClientCompagnie;
 DROP TABLE IF EXISTS Client;
 
 
-CREATE TABLE PersonneContact(
-  id integer PRIMARY KEY,
-  nom varchar(255),
-  prenom varchar(255),
-  courriel varchar(255),
-  numero_telephone varchar(15)
-);
-
-CREATE TABLE Client (
+CREATE TABLE Personne_Contact(
     id integer PRIMARY KEY,
     nom varchar(255),
     prenom varchar(255),
     courriel varchar(255),
-    tel varchar(255),
-    code_postal varchar(255),
-    adresse varchar(255),
-    pays varchar(255),
-    province varchar(255)
+numero_telephone varchar(15)
 );
 
-CREATE TABLE ClientIndividu(
-  id integer PRIMARY KEY,
+CREATE TABLE Client (
+    id integer PRIMARY KEY,
+    adresse_civil varchar(255),
+    code_postal varchar(255),
+    ville varchar(255),
+    province varchar(255),
+    pays varchar(255),
+);
+
+CREATE TABLE Client_Individu(
+   id integer PRIMARY KEY,
    nom varchar(255),
    prenom varchar(255),
    courriel varchar(255),
@@ -40,7 +37,7 @@ CREATE TABLE ClientIndividu(
    CONSTRAINT fk_client_individu FOREIGN KEY (id_client) REFERENCES Client(id)
 );
 
-CREATE TABLE ClientCompagnie(
+CREATE TABLE Client_Compagnie(
     id integer PRIMARY KEY,
     nom_compagnie VARCHAR(255),
     numero_compagnie INT,

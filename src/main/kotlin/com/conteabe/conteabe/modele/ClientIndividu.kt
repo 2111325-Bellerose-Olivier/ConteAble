@@ -1,12 +1,15 @@
 package com.conteabe.conteabe.modele
 
-import com.conteabe.conteabe.dao.Entite
-
-class ClientIndividu(
-    id: Int,
+class ClientIndividu (
+    var idIndividu: Int?,
+    adresse_civil: String,
+    code_postal: String,
+    ville: String,
+    province: String,
+    pays: String,
     var nom: String,
     var prenom: String,
     var courriel: String,
     var numero_telephone: String,
-    var client: Client
-) : Entite(id)
+    idClient: Int?
+) : Client(idClient, adresse_civil, code_postal, ville, province, pays)

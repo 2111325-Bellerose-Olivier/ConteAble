@@ -4,16 +4,13 @@ import kotlin.reflect.KFunction
 import kotlin.reflect.full.primaryConstructor
 
 enum class Page(val view: String, val constructor: KFunction<*>) {
-    Hello(
-        "hello-view.fxml",
-        HelloController::class.primaryConstructor!!
+    Client(
+        "client-view.fxml",
+        ClientController::class.primaryConstructor!!
     ),
-<<<<<<< HEAD
 
-=======
-    Employe(
-        "tache.fxml",
-        TacheController::class.primaryConstructor!!
+    AjouterClient(
+    "client-ajouter.fxml",
+        CreationClientController::class.primaryConstructor!!
     ),
->>>>>>> dev
 }

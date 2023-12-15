@@ -14,7 +14,6 @@ import javafx.stage.Stage
  */
 class Contexte(private val stage: Stage) {
     val services: ConteneurService = ConteneurService()
-    var employeConnecte: Employe? = null
 
     fun SetPage(page: Page) {
         val chargeur = FXMLLoader(MainApplication::class.java.getResource(page.view))
