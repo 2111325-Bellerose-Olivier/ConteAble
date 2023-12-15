@@ -13,31 +13,6 @@ class ClientCompagnieDAO(serviceBD: ServiceBD) : DAOAbstraite<ClientCompagnie>(s
 
     // * Insert et Update * //
 
-    private fun enregistrerClient(connexion: Connection, entite: ClientCompagnie) {
-        val insert = "INSERT INTO Client (adresse_civil, code_postal, ville, province, pays) VALUES (?, ?, ?, ?, ?);"
-        val update = "UPDATE Client SET adresse_civi=?, code_postal=?, ville=?, province=?, pays=? WHERE id = ?;"
-        var requete: PreparedStatement
-
-        if (entite.id == null) {
-            requete = connexion.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)
-        } else {
-            requete = connexion.prepareStatement(update)
-            requete.setInt(6, entite.id!!)
-        }
-
-        requete.setString(1, entite.adresse_civil)
-        requete.setString(2, entite.code_postal)
-        requete.setString(3, entite.ville)
-        requete.setString(4, entite.province)
-        requete.setString(5, entite.pays)
-
-        if (requete.executeUpdate() > 0) {
-            val rowId = connexion.prepareStatement("SELECT last_insert_rowid()").executeQuery()
-            rowId.next()
-            entite.id = rowId.getInt(1)
-        }
-    }
-
     private fun enregistrerPersonneContact(connexion: Connection, entite: PersonneContact) {
         val insert = "INSERT INTO Personne_Contact (nom, prenom, courriel, numero_telephone) VALUES (?, ?, ?, ?);"
         val update = "UPDATE Personne_Contact SET nom=?, prenom=?, courriel=?, numero_telephone=? WHERE id = ?;"
@@ -88,10 +63,9 @@ class ClientCompagnieDAO(serviceBD: ServiceBD) : DAOAbstraite<ClientCompagnie>(s
     }
 
     override fun enregistrer(entite: ClientCompagnie) {
-        val estInsertion = entite.id == null
         val connexion = serviceBD.ouvrirConnexion()
 
-        enregistrerClient(connexion, entite)
+        ClientDAO().enregistrer(connexion, entite)
         enregistrerPersonneContact(connexion, entite.personne_contact)
         enregistrerClientCompagnie(connexion, entite)
 
@@ -120,28 +94,6 @@ class ClientCompagnieDAO(serviceBD: ServiceBD) : DAOAbstraite<ClientCompagnie>(s
         return personneContact
     }
 
-    private fun chargerClientParId(connexion: Connection, id_client: Int?) : Client? {
-        val requete: PreparedStatement =
-                connexion.prepareStatement("SELECT * FROM Client WHERE id = ?;")
-                requete.setInt(1, id_client!!)
-        val resultats: ResultSet = requete.executeQuery()
-
-        val client: Client? =
-        if (resultats.next())
-            Client(
-                resultats.getInt("id"),
-                resultats.getString("adresse_civil"),
-                resultats.getString("code_postal"),
-                resultats.getString("ville"),
-                resultats.getString("province"),
-                resultats.getString("pays"),
-
-            )
-        else null
-
-        return client
-    }
-
     private fun chargerClientCompagnieParId(connexion: Connection, id: Int): ClientCompagnie? {
         val requete: PreparedStatement =
                 connexion.prepareStatement("SELECT * FROM Client_Compagnie WHERE id=?;")
@@ -150,7 +102,7 @@ class ClientCompagnieDAO(serviceBD: ServiceBD) : DAOAbstraite<ClientCompagnie>(s
 
         val clientCompagnie: ClientCompagnie? =
             if (resultats.next()) {
-                val client: Client?  = chargerClientParId(connexion, resultats.getInt("id_client"))
+                val client: Client? = ClientDAO().chargerParId(connexion, resultats.getInt("id_client"))
                 val personneContact: PersonneContact? = chargerPersonneContactParId(connexion, resultats.getInt("personne_contact"))
 
                 ClientCompagnie(
@@ -179,7 +131,7 @@ class ClientCompagnieDAO(serviceBD: ServiceBD) : DAOAbstraite<ClientCompagnie>(s
         val clientCompagnies: MutableList<ClientCompagnie> = mutableListOf()
 
         while (resultats.next()) {
-            val client: Client?  = chargerClientParId(connexion, resultats.getInt("id_client"))
+            val client: Client? = ClientDAO().chargerParId(connexion, resultats.getInt("id_client"))
             val personneContact: PersonneContact? = chargerPersonneContactParId(connexion, resultats.getInt("personne_contact"))
 
             clientCompagnies.add(
@@ -247,14 +199,6 @@ class ClientCompagnieDAO(serviceBD: ServiceBD) : DAOAbstraite<ClientCompagnie>(s
 
     }
 
-    private fun supprimerClient(connexion: Connection, id: Int?) {
-        val requete = connexion.prepareStatement("DELETE FROM Client WHERE id=?;")
-        requete.setInt(1, id!!)
-
-        requete.executeUpdate()
-
-    }
-
     private fun supprimerClientCompagnie(connexion: Connection, id: Int?) {
         val requete = connexion.prepareStatement("DELETE FROM Client_Compagnie WHERE id=?;")
         requete.setInt(1, id!!)
@@ -268,7 +212,7 @@ class ClientCompagnieDAO(serviceBD: ServiceBD) : DAOAbstraite<ClientCompagnie>(s
         val idPersonne = chargerIdPersonneContact(connexion, id)
 
         supprimerPersonneContact(connexion, idPersonne)
-        supprimerClient(connexion, idClient)
+        ClientDAO().supprimer(connexion, idClient)
         supprimerClientCompagnie(connexion, id)
 
         serviceBD.fermerConnexion()
