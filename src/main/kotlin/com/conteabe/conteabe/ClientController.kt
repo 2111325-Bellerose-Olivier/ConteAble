@@ -10,8 +10,7 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
 import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
-import javafx.scene.control.TableColumn
-import javafx.scene.control.TableView
+import javafx.scene.control.*
 import javafx.scene.control.cell.PropertyValueFactory
 import javafx.util.Callback
 import java.util.function.Predicate
@@ -37,6 +36,9 @@ class ClientController(private val contexte: Contexte) {
 
     @FXML
     private lateinit var provinceClients: TableColumn<Client, String>
+
+    @FXML
+    private lateinit var messageErreur: Label
 
     private lateinit var clientsCompagnie: FilteredList<ClientCompagnie>
     private lateinit var clientIndividus: FilteredList<ClientIndividu>
@@ -84,11 +86,52 @@ class ClientController(private val contexte: Contexte) {
 
         clients.predicate = Predicate { true }
         listeClients.items = clients
+
+        listeClients.setRowFactory { tv ->
+            val row = TableRow<Client>()
+
+            row.setOnMouseClicked { event ->
+                if (event.clickCount == 2 && !row.isEmpty) {
+                    val employe: Client = row.item
+                }
+            }
+            row
+        }
+    }
+
+    private fun creerDialogue(): Boolean {
+        val confirmationDialog = Alert(Alert.AlertType.CONFIRMATION)
+        confirmationDialog.title = "Confirmation Suppression"
+        confirmationDialog.headerText = "Voulez-vous vraiment supprimer le client?"
+
+        val result = confirmationDialog.showAndWait()
+
+        return result.get() == ButtonType.OK
     }
 
     @FXML
-    private fun onAjouterButtonClick() {
-        contexte.SetPage(Page.AjouterClient)
+    private fun onSupprimerClick() {
+        val selectedClient: Client? = listeClients.selectionModel.selectedItem
+
+        if (!messageErreur.isVisible && selectedClient == null) {
+            messageErreur.isVisible = true
+            return
+        }
+
+        if (!creerDialogue()) {
+            return
+        }
+
+        messageErreur.isVisible = false
+
+        if (selectedClient is ClientCompagnie) {
+            ClientCompagnieDAO(contexte.services.getService<ServiceBD>() as ServiceBD).supprimer(selectedClient.idCompagnie!!)
+        } else if (selectedClient is ClientIndividu) {
+            ClientIndividuDAO(contexte.services.getService<ServiceBD>() as ServiceBD).supprimer(selectedClient.idIndividu!!)
+        }
+
+        initialize()
     }
+
 }
 

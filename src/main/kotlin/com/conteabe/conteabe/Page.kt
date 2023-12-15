@@ -8,9 +8,4 @@ enum class Page(val view: String, val constructor: KFunction<*>) {
         "client-view.fxml",
         ClientController::class.primaryConstructor!!
     ),
-
-    AjouterClient(
-    "client-ajouter.fxml",
-        CreationClientController::class.primaryConstructor!!
-    ),
 }

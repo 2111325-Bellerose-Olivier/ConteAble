@@ -169,8 +169,39 @@ class ClientIndividuDAO(serviceBD: ServiceBD) : DAOAbstraite<ClientIndividu>(ser
         return client
     }
 
+    private fun chargerIdClient(connexion: Connection, id: Int?) : Int {
+        val requete = connexion.prepareStatement("SELECT id_client FROM Client_Compagnie WHERE id=?;")
+        requete.setInt(1, id!!)
+        val resultat: ResultSet = requete.executeQuery()
+
+        return resultat.getInt("id_client")
+    }
+
+    private fun supprimerClient(connexion: Connection, id: Int?) {
+        val requete = connexion.prepareStatement("DELETE FROM Client WHERE id=?;")
+        requete.setInt(1, id!!)
+
+        requete.executeUpdate()
+    }
+
+    private fun supprimerClientIndividu(connexion: Connection, id: Int?) {
+        val requete = connexion.prepareStatement("DELETE FROM Client_Individu WHERE id=?;")
+        requete.setInt(1, id!!)
+
+        requete.executeUpdate()
+    }
+
     override fun supprimer(id: Int): Boolean {
-        TODO("Not yet implemented")
+        val connexion = serviceBD.ouvrirConnexion()
+        val idClient = chargerIdClient(connexion, id);
+
+        supprimerClient(connexion, idClient)
+        supprimerClientIndividu(connexion, id)
+
+        serviceBD.fermerConnexion()
+
+
+        return false
     }
 
 }

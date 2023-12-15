@@ -223,61 +223,57 @@ class ClientCompagnieDAO(serviceBD: ServiceBD) : DAOAbstraite<ClientCompagnie>(s
     }
 
     // * Delete * //
+    private fun chargerIdPersonneContact(connexion: Connection, id: Int?) : Int {
+        val requete = connexion.prepareStatement("SELECT personne_contact FROM Client_Compagnie WHERE id=?;")
+        requete.setInt(1, id!!)
+        val resultat: ResultSet = requete.executeQuery()
 
-    private fun supprimerPersonne_Contact(connexion: Connection, id: Int): Boolean {
-        var requete: PreparedStatement =
-            connexion.prepareStatement("DELETE FROM Personne_Contact WHERE id = ?;")
-            requete.setInt(1, id)
-
-        val rows = requete.executeUpdate()
-
-        return rows > 0
+        return resultat.getInt("personne_contact")
     }
 
-    private fun supprimerClient(connexion: Connection, id: Int): Boolean {
-        var requete: PreparedStatement =
-                connexion.prepareStatement("DELETE FROM Client WHERE id = ?;")
-                requete.setInt(1, id)
+    private fun chargerIdClient(connexion: Connection, id: Int?) : Int {
+        val requete = connexion.prepareStatement("SELECT id_client FROM Client_Compagnie WHERE id=?;")
+        requete.setInt(1, id!!)
+        val resultat: ResultSet = requete.executeQuery()
 
-        val rows = requete.executeUpdate()
-
-        return  rows > 0;
+        return resultat.getInt("id_client")
     }
 
-    private fun supprimerClientCompagnie(connexion: Connection, id: Int): Boolean {
-        val requete: PreparedStatement =
-                connexion.prepareStatement("DELETE FROM Client_Compagnie WHERE id = ?;")
-                requete.setInt(1, id)
-        val rows = requete.executeUpdate()
+    private fun supprimerPersonneContact(connexion: Connection, id: Int?) {
+        val requete = connexion.prepareStatement("DELETE FROM Personne_Contact WHERE id=?;")
+        requete.setInt(1, id!!)
 
-        return rows > 0
+        requete.executeUpdate()
+
+    }
+
+    private fun supprimerClient(connexion: Connection, id: Int?) {
+        val requete = connexion.prepareStatement("DELETE FROM Client WHERE id=?;")
+        requete.setInt(1, id!!)
+
+        requete.executeUpdate()
+
+    }
+
+    private fun supprimerClientCompagnie(connexion: Connection, id: Int?) {
+        val requete = connexion.prepareStatement("DELETE FROM Client_Compagnie WHERE id=?;")
+        requete.setInt(1, id!!)
+
+        requete.executeUpdate()
     }
 
     override fun supprimer(id: Int): Boolean {
         val connexion = serviceBD.ouvrirConnexion()
-        val sql = "SELECT personne_contact, id_client FROM Client_Compagnie WHERE id = ?;"
-        var aReussi: Boolean = true
+        val idClient = chargerIdClient(connexion, id)
+        val idPersonne = chargerIdPersonneContact(connexion, id)
 
-        val requete: PreparedStatement = connexion.prepareStatement(sql)
-            requete.setInt(1, id)
-        val resultat = requete.executeQuery()
-
-        var personneContactId: Int? = null
-        var clientId: Int? = null
-
-        if (resultat.next()) {
-            personneContactId = resultat.getInt("personne_contact")
-            clientId = resultat.getInt("id_client")
-
-            aReussi = supprimerPersonne_Contact(connexion, personneContactId)
-            aReussi = supprimerClient(connexion, clientId) && aReussi
-        }
-
-        aReussi = supprimerClientCompagnie(connexion, id) && aReussi
+        supprimerPersonneContact(connexion, idPersonne)
+        supprimerClient(connexion, idClient)
+        supprimerClientCompagnie(connexion, id)
 
         serviceBD.fermerConnexion()
 
-        return aReussi
+        return false
     }
 
 }
