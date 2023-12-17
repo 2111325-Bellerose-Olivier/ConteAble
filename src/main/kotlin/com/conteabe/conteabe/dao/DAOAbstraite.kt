@@ -1,5 +1,6 @@
 package com.conteabe.conteabe.dao
 
+import com.conteabe.conteabe.dao.Entite
 import com.conteabe.conteabe.service.ServiceBD
 
 /**
@@ -40,6 +41,5 @@ abstract class DAOAbstraite<T>(serviceBD: ServiceBD) where T : Entite {
      */
     abstract fun chargerParId(id: Int): T?
 
-    abstract fun supprimer(id: Int): Boolean
-
+    abstract fun supprimer(id: Int): Boolean?
 }
