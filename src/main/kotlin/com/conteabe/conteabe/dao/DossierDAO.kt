@@ -1,11 +1,9 @@
 package com.conteabe.conteabe.dao
 
 import com.conteabe.conteabe.modele.Dossier
-import com.conteabe.conteabe.modele.Tache
 import com.conteabe.conteabe.service.ServiceBD
 import java.sql.PreparedStatement
 import java.sql.ResultSet
-import java.sql.Statement
 
 class DossierDAO(serviceBD: ServiceBD) : DAOAbstraite<Dossier>(serviceBD) {
     override fun enregistrer(entite: Dossier) {
