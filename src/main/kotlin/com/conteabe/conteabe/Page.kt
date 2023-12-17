@@ -24,5 +24,17 @@ enum class Page(val view: String, val constructor: KFunction<*>) {
     SupprimerEmploye(
         "./GererEmployeFXML/supprimer-employe.fxml",
         SupprimerEmployeController::class.primaryConstructor!!
+    ),
+    Employe(
+        "tache.fxml",
+        TacheController::class.primaryConstructor!!
+    ),
+    RapportHeures(
+        "rapport-heures.fxml",
+        RapportHeuresController::class.primaryConstructor!!
+    ),
+    __PrintHeuresEmploye(
+        "print-heures-employe.fxml",
+        PrintHeuresEmployeController::class.primaryConstructor!!
     )
 }

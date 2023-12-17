@@ -22,13 +22,15 @@ class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
         val connexion = serviceBD.ouvrirConnexion()
         val estInsertion: Boolean = entite.id == null
 
-        val requete: PreparedStatement = if (estInsertion) {
-            connexion.prepareStatement(
+        val requete: PreparedStatement
+        if (estInsertion) {
+            requete = connexion.prepareStatement(
                 "INSERT INTO Employe (nom, prenom, mdp, id_role, courriel) VALUES (?, ?, ?, ? ,?);",
                 Statement.RETURN_GENERATED_KEYS
             )
         } else {
-            connexion.prepareStatement("UPDATE Employe SET nom = ?, prenom = ?, mdp = ?, id_role = ?, courriel = ?;")
+            requete = connexion.prepareStatement("UPDATE Employe SET nom = ?, prenom = ?, mdp = ?, id_role = ?, courriel = ? WHERE id = ?;")
+            requete.setInt(6, entite.id!!)
         }
 
         requete.setString(1, entite.nom)
@@ -37,7 +39,9 @@ class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
         requete.setInt(4, entite.id_role)
         requete.setString(5, entite.courriel)
 
-        if (requete.executeUpdate() > 0) {
+        val requeteReussi = requete.executeUpdate() > 0
+
+        if (requeteReussi && estInsertion) {
             val rowId = connexion.prepareStatement("SELECT last_insert_rowid()").executeQuery()
             rowId.next()
             entite.id = rowId.getInt(1)
