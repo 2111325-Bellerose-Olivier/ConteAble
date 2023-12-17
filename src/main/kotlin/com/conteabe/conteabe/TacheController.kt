@@ -37,13 +37,13 @@ class TacheController (private val contexte: Contexte) {
     private lateinit var listeDossier: TableView<Dossier>
 
     @FXML
-    private lateinit var idDossier: TableColumn<Employe, Int>
+    private lateinit var idDossier: TableColumn<Dossier, Int>
 
     @FXML
-    private lateinit var idClient: TableColumn<Employe, Int>
+    private lateinit var idClient: TableColumn<Dossier, Int>
 
     @FXML
-    private lateinit var nomDossier: TableColumn<Employe, String>
+    private lateinit var nomDossier: TableColumn<Dossier, String>
 
     @FXML
     private lateinit var tauxHorraireAjout: DoubleField
@@ -54,7 +54,18 @@ class TacheController (private val contexte: Contexte) {
     @FXML
     private lateinit var nomDossierAjout: TextField
 
+    @FXML
+    private lateinit var tauxHorraireModifier: DoubleField
+
+    @FXML
+    private lateinit var idTacheModifier: IntegerField
+
+    @FXML
+    private lateinit var nomTacheModifier: TextField
+
     private lateinit var dossiers: FilteredList<Dossier>
+
+    private lateinit var tacheModifier: Tache
 
     fun initialize() {
         taches = FilteredList<Tache>(
@@ -80,7 +91,7 @@ class TacheController (private val contexte: Contexte) {
 
         idDossier.cellValueFactory = PropertyValueFactory("id")
         nomDossier.cellValueFactory = PropertyValueFactory("nom")
-        idClient.cellValueFactory = PropertyValueFactory("id_client")
+        idClient.cellValueFactory = PropertyValueFactory("idClient")
 
         dossiers.predicate = Predicate { true }
         taches.predicate = Predicate { true }
@@ -95,13 +106,24 @@ class TacheController (private val contexte: Contexte) {
         val dossier = idDossierAjout.value
         val nom = nomDossierAjout.text
 
-        TacheDAO(
-            contexte.services.getService<ServiceBD>() as ServiceBD
-        ).enregistrer(Tache(null, nom, taux))
+        val tacheDAO = TacheDAO(contexte.services.getService<ServiceBD>() as ServiceBD)
+        tacheDAO.enregistrer(Tache(id = null, nom = nom, taux = taux))
+
+        val idTacheAjoute = tacheDAO.trouverdernierinseree();
+
+        tacheDAO.insererTableTacheDossier(dossier, idTacheAjoute)
+
+        taches = FilteredList(FXCollections.observableList(tacheDAO.chargerTout()))
+        listeTaches.items = taches
     }
 
     @FXML
     private fun modifier() {
-        contexte.SetPage(Page.Hello)
+        val taux = tauxHorraireModifier.value.toFloat()
+        val tacheId = idTacheModifier.value
+        val nom = nomTacheModifier.text
+
+        val tacheDAO = TacheDAO(contexte.services.getService<ServiceBD>() as ServiceBD)
+        tacheDAO.enregistrer(Tache(id = tacheId, nom = nom, taux = taux))
     }
 }

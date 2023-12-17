@@ -59,6 +59,17 @@
             <Label fx:id="Ajouter"/>
             <Button text="Ajouter!" onAction="#ajouter"/>
 
+            <Text lineSpacing="20.0">Modifier une tâche</Text>
+
+            <Label text="id*"/>
+            <IntegerField fx:id="idTacheModifier"/>
+
+            <Label text="Nom tache*"/>
+            <TextField fx:id="nomTacheModifier"/>
+
+            <Label text="Taux horraire*"/>
+            <DoubleField fx:id="tauxHorraireModifier"/>
+
             <Label fx:id="Modifier"/>
             <Button text="Modifier" onAction="#modifier"/>
         </VBox>

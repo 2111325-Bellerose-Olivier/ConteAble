@@ -12,8 +12,16 @@ enum class Page(val view: String, val constructor: KFunction<*>) {
         "hello-view.fxml",
         HelloController::class.primaryConstructor!!
     ),
-    Employe(
+    Tache(
         "tache.fxml",
         TacheController::class.primaryConstructor!!
     ),
+    Dossier(
+        "dossier-view.fxml",
+        DossierController::class.primaryConstructor!!
+    ),
+    AjouterDossier(
+        "dossier-ajouter.fxml",
+        DosserAjouterController::class.primaryConstructor!!
+    )
 }

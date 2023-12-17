@@ -48,17 +48,17 @@ class DossierController(private val contexte: Contexte) {
     }
 
     fun initialize() {
-        val mutableListDossier: MutableList<Dossier> = DossierDAO(contexte.services.getService<ServiceBD>() as ServiceBD).chargerTout()
-        val listeTemporaire: List<ListeDossier> = mutableListDossier.map {
-            ListeDossier(
-                id = it.id,
-                id_client = it.id_client,
-                nom_client = trouverNomClient(it.id_client),
-                nom_dossier = it.nom,
-            )
-        }
+//        val mutableListDossier: MutableList<Dossier> = DossierDAO(contexte.services.getService<ServiceBD>() as ServiceBD).chargerTout()
+//        val listeTemporaire: List<ListeDossier> = mutableListDossier.map {
+//            ListeDossier(
+//                id = it.id,
+//                id_client = it.id_client,
+//                nom_client = trouverNomClient(it.id_client),
+//                nom_dossier = it.nom,
+//            )
+//        }
 
-        listeDossier = FilteredList<ListeDossier>(FXCollections.observableList(listeTemporaire))
+        //listeDossier = FilteredList<ListeDossier>(FXCollections.observableList(listeTemporaire))
 
         nomDossiers.cellValueFactory = PropertyValueFactory("nom_dossier")
         nomClients.cellValueFactory = PropertyValueFactory("nom_client")
