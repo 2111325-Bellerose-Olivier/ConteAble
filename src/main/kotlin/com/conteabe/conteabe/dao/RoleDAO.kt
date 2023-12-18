@@ -1,28 +1,37 @@
 package com.conteabe.conteabe.dao
 
 import com.conteabe.conteabe.modele.Employe
+import com.conteabe.conteabe.modele.Role
 import com.conteabe.conteabe.service.ServiceBD
 import java.sql.PreparedStatement
 import java.sql.ResultSet
-import java.sql.SQLException
 import java.sql.Statement
-import com.conteabe.conteabe.modele.Tache
 
-class TacheDAO(serviceBD: ServiceBD) : DAOAbstraite<Tache>(serviceBD) {
-    override fun enregistrer(entite: Tache) {
+/**
+ * DAO spécialiser pour les projets.
+ *
+ * @param serviceBD le service de base de données utilisé.
+ *
+ * @author Alexandre
+ * @since 06/05/2023
+ */
+class RoleDAO(serviceBD: ServiceBD) : DAOAbstraite<Role>(serviceBD) {
+
+    override fun enregistrer(entite: Role) {
         val connexion = serviceBD.ouvrirConnexion()
         val estInsertion: Boolean = entite.id == null
 
-        var requete: PreparedStatement = if (estInsertion) {
-            connexion.prepareStatement(
-                "INSERT INTO List_Tache (nom, tauxHorraire) VALUES (?, ?);"
+        val requete: PreparedStatement
+        if (estInsertion) {
+            requete = connexion.prepareStatement(
+                "INSERT INTO Role (nom) VALUES (?);"
             )
         } else {
-            connexion.prepareStatement("UPDATE List_Tache SET nom = ?, taucHorraire = ?")
+            requete = connexion.prepareStatement("UPDATE Role SET nom = ? WHERE id = ?;")
+            requete.setInt(2, entite.id!!)
         }
 
         requete.setString(1, entite.nom)
-        requete.setFloat(2, entite.taucHorraire)
 
         requete.executeUpdate()
 
@@ -36,43 +45,42 @@ class TacheDAO(serviceBD: ServiceBD) : DAOAbstraite<Tache>(serviceBD) {
     }
 
 
-    override fun chargerTout(): MutableList<Tache> {
+    override fun chargerTout(): MutableList<Role> {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement =
-            connexion.prepareStatement("SELECT id, nom, taux_horraire FROM Liste_Tache")
+            connexion.prepareStatement("SELECT id, nom FROM Role")
         val resultats: ResultSet = requete.executeQuery()
-        val taches: MutableList<Tache> = mutableListOf()
+        val employes: MutableList<Role> = mutableListOf()
 
         while (resultats.next()) {
-            taches.add(
-                Tache(
+            employes.add(
+                Role(
                     resultats.getInt("id"),
                     resultats.getString("nom"),
-                    resultats.getFloat("taux_horraire"),
                 )
             )
         }
         serviceBD.fermerConnexion()
-        return taches
+        return employes
     }
 
-    override fun chargerParId(id: Int): Tache? {
+    override fun chargerParId(id: Int): Role? {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement =
-            connexion.prepareStatement("SELECT id, nom, taux_horraire FROM Liste_Tache where id = ?")
+            connexion.prepareStatement("SELECT nom FROM Role where id = ?")
         requete.setInt(1, id)
         val resultats: ResultSet = requete.executeQuery()
 
-        val tache: Tache? = if (resultats.next()) Tache(
-            resultats.getInt("id"),
-            resultats.getString("nom"),
-            resultats.getFloat("taux_horraire"),
+        val employe: Role? = if (resultats.next()) Role(
+            id,
+            resultats.getString("nom")
         ) else null
         serviceBD.fermerConnexion()
-        return tache
+        return employe
     }
 
-    override fun supprimer(id: Int): Boolean {
+    override fun supprimer(id: Int): Boolean? {
         return false;
     }
+
 }

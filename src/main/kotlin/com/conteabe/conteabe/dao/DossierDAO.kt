@@ -14,8 +14,7 @@ class DossierDAO(serviceBD: ServiceBD) : DAOAbstraite<Dossier>(serviceBD) {
 //
 //        var requete: PreparedStatement = if (estInsertion) {
 //            connexion.prepareStatement(
-//                "INSERT INTO List_Tache (nom, tauxHorraire) VALUES (?, ?);",
-//                Statement.RETURN_GENERATED_KEYS
+//                "INSERT INTO List_Tache (nom, tauxHorraire) VALUES (?, ?);"
 //            )
 //        } else {
 //            connexion.prepareStatement("UPDATE List_Tache SET nom = ?, taucHorraire = ?")
@@ -27,11 +26,9 @@ class DossierDAO(serviceBD: ServiceBD) : DAOAbstraite<Dossier>(serviceBD) {
 //        requete.executeUpdate()
 //
 //        if (estInsertion) {
-//            val cleGenere: ResultSet = requete.generatedKeys
-//
-//            if (cleGenere.next()) {
-//                entite.id = cleGenere.getInt(1)
-//            }
+//            val rowId = connexion.prepareStatement("SELECT last_insert_rowid()").executeQuery()
+//            rowId.next()
+//            entite.id = rowId.getInt(1)
 //        }
 //
 //        serviceBD.fermerConnexion()

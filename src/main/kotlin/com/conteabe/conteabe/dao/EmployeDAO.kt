@@ -1,6 +1,7 @@
 package com.conteabe.conteabe.dao
 
 import com.conteabe.conteabe.modele.Employe
+import com.conteabe.conteabe.modele.Role
 import com.conteabe.conteabe.service.ServiceBD
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -17,32 +18,34 @@ import java.sql.Statement
 class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
 
     override fun enregistrer(entite: Employe) {
+        RoleDAO(serviceBD).enregistrer(entite.role)
+
         val connexion = serviceBD.ouvrirConnexion()
         val estInsertion: Boolean = entite.id == null
 
-        var requete: PreparedStatement = if (estInsertion) {
-            connexion.prepareStatement(
-                "INSERT INTO employe (nom, prenom, mdp, id_role, courriel) VALUES (?, ?, ?, ? ,?);",
-                Statement.RETURN_GENERATED_KEYS
+        val requete: PreparedStatement
+        if (estInsertion) {
+            requete = connexion.prepareStatement(
+                "INSERT INTO Employe (nom, prenom, mdp, id_role, courriel) VALUES (?, ?, ?, ? ,?);"
             )
         } else {
-            connexion.prepareStatement("UPDATE employe SET nom = ?, prenom = ?, mdp = ?, id_role = ?, courriel = ?;")
+            requete =
+                connexion.prepareStatement("UPDATE Employe SET nom = ?, prenom = ?, mdp = ?, id_role = ?, courriel = ? WHERE id = ?;")
+            requete.setInt(6, entite.id!!)
         }
 
         requete.setString(1, entite.nom)
         requete.setString(2, entite.prenom)
         requete.setString(3, entite.mdp)
-        requete.setInt(4, entite.id_role)
+        requete.setInt(4, entite.role.id!!)
         requete.setString(5, entite.courriel)
 
         requete.executeUpdate()
 
         if (estInsertion) {
-            val cleGenere: ResultSet = requete.generatedKeys
-
-            if (cleGenere.next()) {
-                entite.id = cleGenere.getInt(1)
-            }
+            val rowId = connexion.prepareStatement("SELECT last_insert_rowid()").executeQuery()
+            rowId.next()
+            entite.id = rowId.getInt(1)
         }
 
         serviceBD.fermerConnexion()
@@ -52,7 +55,7 @@ class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
     override fun chargerTout(): MutableList<Employe> {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement =
-            connexion.prepareStatement("SELECT id, nom, prenom, mdp, id_role, courriel FROM Employe")
+            connexion.prepareStatement("SELECT e.id, e.nom, e.prenom, e.mdp, r.id AS role_id, r.nom AS role_name, e.courriel FROM Employe e INNER JOIN Role r ON e.id_role = r.id")
         val resultats: ResultSet = requete.executeQuery()
         val employes: MutableList<Employe> = mutableListOf()
 
@@ -63,7 +66,10 @@ class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
                     resultats.getString("nom"),
                     resultats.getString("prenom"),
                     resultats.getString("mdp"),
-                    resultats.getInt("id_role"),
+                    Role(
+                        resultats.getInt("role_id"),
+                        resultats.getString("role_nom")
+                    ),
                     resultats.getString("courriel")
                 )
             )
@@ -75,7 +81,7 @@ class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
     override fun chargerParId(id: Int): Employe? {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement =
-            connexion.prepareStatement("SELECT id, nom, prenom, mdp, id_role, courriel FROM Employe where id = ?")
+            connexion.prepareStatement("SELECT e.id, e.nom, e.prenom, e.mdp, r.id AS role_id, r.nom AS role_nom, e.courriel FROM Employe e INNER JOIN Role r ON e.id_role = r.id WHERE e.id = ?")
         requete.setInt(1, id)
         val resultats: ResultSet = requete.executeQuery()
 
@@ -84,7 +90,10 @@ class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
             resultats.getString("nom"),
             resultats.getString("prenom"),
             resultats.getString("mdp"),
-            resultats.getInt("id_role"),
+            Role(
+                resultats.getInt("role_id"),
+                resultats.getString("role_nom")
+            ),
             resultats.getString("courriel")
         ) else null
         serviceBD.fermerConnexion()
