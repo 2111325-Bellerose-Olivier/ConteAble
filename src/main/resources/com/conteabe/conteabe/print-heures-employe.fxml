@@ -11,8 +11,6 @@
     </HBox>
     <TableView fx:id="listeHeures">
         <columns>
-            <TableColumn prefWidth="75.0" text="debut" fx:id="debuts" editable="false"/>
-            <TableColumn prefWidth="75.0" text="fin" fx:id="fins" editable="false"/>
             <TableColumn prefWidth="75.0" text="duree" fx:id="durees" editable="false"/>
             <TableColumn prefWidth="75.0" text="tache" fx:id="taches" editable="false"/>
             <TableColumn prefWidth="75.0" text="taux" fx:id="tauxs" editable="false"/>

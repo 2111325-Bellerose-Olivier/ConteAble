@@ -30,11 +30,9 @@ class TacheDAO(serviceBD: ServiceBD) : DAOAbstraite<Tache>(serviceBD) {
         val requeteReussi = requete.executeUpdate() > 0
 
         if (requeteReussi && estInsertion) {
-            val cleGenere: ResultSet = requete.generatedKeys
-
-            if (cleGenere.next()) {
-                entite.id = cleGenere.getInt(1)
-            }
+            val rowId = connexion.prepareStatement("SELECT last_insert_rowid()").executeQuery()
+            rowId.next()
+            entite.id = rowId.getInt(1)
         }
 
         serviceBD.fermerConnexion()
@@ -44,7 +42,7 @@ class TacheDAO(serviceBD: ServiceBD) : DAOAbstraite<Tache>(serviceBD) {
     override fun chargerTout(): MutableList<Tache> {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement =
-            connexion.prepareStatement("SELECT id, nom, taux_horraire FROM Liste_Tache")
+            connexion.prepareStatement("SELECT id, nom, taux_horraire FROM List_Tache")
         val resultats: ResultSet = requete.executeQuery()
         val taches: MutableList<Tache> = mutableListOf()
 
@@ -64,7 +62,7 @@ class TacheDAO(serviceBD: ServiceBD) : DAOAbstraite<Tache>(serviceBD) {
     override fun chargerParId(id: Int): Tache? {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement =
-            connexion.prepareStatement("SELECT id, nom, taux_horraire FROM Liste_Tache where id = ?")
+            connexion.prepareStatement("SELECT id, nom, taux_horraire FROM List_Tache where id = ?")
         requete.setInt(1, id)
         val resultats: ResultSet = requete.executeQuery()
 
