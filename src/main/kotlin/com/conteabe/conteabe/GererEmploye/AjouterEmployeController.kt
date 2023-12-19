@@ -59,14 +59,14 @@ class AjouterEmployeController(private val contexte: Contexte) {
 
     @FXML
     private fun ajouter() {
-        val role_id = role.selectionModel.selectedItem?.id
-        if (role_id == null) {
+        val role = role.selectionModel.selectedItem
+        if (role == null) {
             validation.text = "Il faut selectionner son role"
             return
         }
 
         val employe =
-            Employe(null, nom.text, prenom.text, BCrypt.hashpw(password.text, BCrypt.gensalt()), role_id, courriel.text)
+            Employe(null, nom.text, prenom.text, BCrypt.hashpw(password.text, BCrypt.gensalt()), role, courriel.text)
 
         EmployeDAO(
             contexte.services.getService<ServiceBD>() as ServiceBD
