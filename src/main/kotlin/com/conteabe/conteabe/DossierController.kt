@@ -1,8 +1,13 @@
 package com.conteabe.conteabe
 
-import com.conteabe.conteabe.dao.ClientDAO
-import com.conteabe.conteabe.modele.Client
+import com.conteabe.conteabe.dao.ClientCompagnieDAO
+import com.conteabe.conteabe.dao.ClientIndividuDAO
+import com.conteabe.conteabe.dao.DossierDAO
+import com.conteabe.conteabe.modele.ClientCompagnie
+import com.conteabe.conteabe.modele.ClientIndividu
+import com.conteabe.conteabe.modele.Dossier
 import com.conteabe.conteabe.service.ServiceBD
+import javafx.collections.FXCollections
 import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
 import javafx.scene.control.TableColumn
@@ -28,16 +33,17 @@ class DossierController(private val contexte: Contexte) {
 
     private lateinit var listeDossier: FilteredList<ListeDossier>
 
-    private fun trouverNomClient(id_client: Int?): String {
-        val clients: MutableList<Client> =
-            ClientDAO(contexte.services.getService<ServiceBD>() as ServiceBD).chargerTout()
+    private fun trouverNomClient(id_client: Int?) : String {
+        var clientsCompagnie: MutableList<ClientCompagnie> = (ClientCompagnieDAO(contexte.services.getService<ServiceBD>() as ServiceBD).chargerTout())
+        var clientsIndividu: MutableList<ClientIndividu> = (ClientIndividuDAO(contexte.services.getService<ServiceBD>() as ServiceBD).chargerTout())
 
-        val matchingClient = clients.find { it.id == id_client }
+        val matchingClientCompagnie = clientsCompagnie.find { it.id == id_client }
+        val matchingClientIndividu = clientsIndividu.find { it.id == id_client }
 
-        return if (matchingClient == null) {
-            "Client Inconnu"
-        } else {
-            "${matchingClient.nom} ${matchingClient.prenom}"
+        return when {
+            matchingClientCompagnie != null -> matchingClientCompagnie.nom_compagnie
+            matchingClientIndividu != null -> matchingClientIndividu.prenom + " " + matchingClientIndividu.nom
+            else -> "Client Inconnu"
         }
     }
 

@@ -11,12 +11,7 @@ CREATE TABLE Client (
   code_postal varchar(255),
   ville varchar(255),
   province varchar(255),
-  pays varchar(255),
-
-  nom varchar(255),
-  prenom varchar(255),
-  courriel varchar(255),
-  numero_telephone varchar(15)
+  pays varchar(255)
 );
 
 CREATE TABLE Dossier (
