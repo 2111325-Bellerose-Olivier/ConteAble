@@ -1,23 +1,9 @@
-DROP TABLE IF EXISTS Personne_Contact;
-DROP TABLE IF EXISTS Client_Individu;
 DROP TABLE IF EXISTS Client;
 DROP TABLE IF EXISTS Tache_Dossier;
 DROP TABLE IF EXISTS Employe;
 DROP TABLE IF EXISTS Role;
 DROP TABLE IF EXISTS Liste_Tache;
 DROP TABLE IF EXISTS Dossier;
-DROP TABLE IF EXISTS Tache_Dossier;
-DROP TABLE IF EXISTS List_Tache;
-DROP TABLE IF EXISTS Dossier;
-DROP TABLE IF EXISTS Client;
-
-CREATE TABLE Personne_Contact(
-  id integer PRIMARY KEY AUTOINCREMENT,
-  nom varchar(255),
-  prenom varchar(255),
-  courriel varchar(255),
-  numero_telephone varchar(15)
-);
 
 CREATE TABLE Client (
   id integer PRIMARY KEY AUTOINCREMENT,
@@ -26,26 +12,6 @@ CREATE TABLE Client (
   ville varchar(255),
   province varchar(255),
   pays varchar(255)
-);
-
-CREATE TABLE Client_Individu(
-  id integer PRIMARY KEY AUTOINCREMENT,
-  nom varchar(255),
-  prenom varchar(255),
-  courriel varchar(255),
-  numero_telephone varchar(15),
-  id_client int,
-  CONSTRAINT fk_client_individu FOREIGN KEY (id_client) REFERENCES Client(id)
-);
-
-CREATE TABLE Client_Compagnie(
-  id integer PRIMARY KEY AUTOINCREMENT,
-  nom_compagnie VARCHAR(255),
-  numero_compagnie INT,
-  personne_contact INT,
-  id_client INT,
-  CONSTRAINT fk_client_compagnie FOREIGN KEY (id_client) REFERENCES Client(id),
-  CONSTRAINT fk_personne_contact FOREIGN KEY (personne_contact) REFERENCES PersonneContact(id)
 );
 
 CREATE TABLE Dossier (
@@ -65,6 +31,7 @@ CREATE TABLE Role (
   id integer PRIMARY KEY AUTOINCREMENT,
   nom varchar(255)
 );
+
 INSERT INTO Role(nom) VALUES ("Superviseur");
 
 CREATE TABLE Employe (
@@ -87,3 +54,9 @@ CREATE TABLE Tache_Dossier (
   CONSTRAINT fk_dossier FOREIGN KEY (id_dossier) REFERENCES Dosser(id),
   CONSTRAINT fk_employe FOREIGN KEY (id_employe) REFERENCES Employe(id)
 );
+
+INSERT INTO Client(adresse_civil,  code_postal, ville, province, pays) VALUES ("123 9 Avenue", "A1B 2C3", "Victoriaville", "Québec", "Canada");
+
+INSERT INTO Liste_Tache(nom, taux_horraire) VALUES ("Calculation temps", 20.50);
+INSERT INTO Dossier(id_client, nom) VALUES (1, "Entreprise principale");
+
