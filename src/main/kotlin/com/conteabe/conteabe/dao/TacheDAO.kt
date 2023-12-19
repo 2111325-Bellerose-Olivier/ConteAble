@@ -13,6 +13,7 @@ class TacheDAO(serviceBD: ServiceBD) : DAOAbstraite<Tache>(serviceBD) {
         enregistrerEntite(
                 "INSERT INTO List_Tache (nom, tauxHorraire) VALUES (?, ?);",
                 "UPDATE List_Tache SET nom = ?, taucHorraire = ?",
+                3,
                 entite)
         { requete ->
             requete.setString(1, entite.nom)
