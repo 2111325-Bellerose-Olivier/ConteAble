@@ -36,7 +36,7 @@ enum class Page(val view: String, val constructor: KFunction<*>) {
     __PrintHeuresEmploye(
         "print-heures-employe.fxml",
         PrintHeuresEmployeController::class.primaryConstructor!!
-    )
+    ),
     Dossier(
         "dossier-view.fxml",
         DossierController::class.primaryConstructor!!
@@ -44,5 +44,9 @@ enum class Page(val view: String, val constructor: KFunction<*>) {
     AjouterDossier(
         "dossier-ajouter.fxml",
         DosserAjouterController::class.primaryConstructor!!
+    ),
+    AjoutHeures(
+        "ajout-heure.fxml",
+        AjoutHeure::class.primaryConstructor!!
     )
 }

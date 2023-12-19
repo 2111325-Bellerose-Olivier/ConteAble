@@ -15,8 +15,10 @@ class TacheDAO(serviceBD: ServiceBD) : DAOAbstraite<Tache>(serviceBD) {
         val connexion = serviceBD.ouvrirConnexion()
         val estInsertion: Boolean = entite.id == null
 
-        var requete: PreparedStatement = if (estInsertion) {
-            connexion.prepareStatement(
+        val requete: PreparedStatement
+
+        if (estInsertion) {
+            requete= connexion.prepareStatement(
                 "INSERT INTO List_Tache (nom, taux_Horraire) VALUES (?, ?);",
                 Statement.RETURN_GENERATED_KEYS
             )
