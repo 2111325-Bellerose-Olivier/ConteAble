@@ -25,7 +25,7 @@ class ServiceBD : IService {
      */
     fun ouvrirConnexion(): Connection {
         if (this::connexion.isInitialized && !connexion.isClosed) {
-            fermerConnexion()
+            throw Exception("Duplicate connexions")
         }
         connexion = DriverManager.getConnection("jdbc:sqlite:db_contable.db")
         return connexion

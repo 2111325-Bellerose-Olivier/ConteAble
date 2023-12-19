@@ -33,11 +33,9 @@ class TacheDAO(serviceBD: ServiceBD) : DAOAbstraite<Tache>(serviceBD) {
         val requeteReussi = requete.executeUpdate() > 0
 
         if (requeteReussi && estInsertion) {
-            val cleGenere: ResultSet = requete.generatedKeys
-
-            if (cleGenere.next()) {
-                entite.id = cleGenere.getInt(1)
-            }
+            val rowId = connexion.prepareStatement("SELECT last_insert_rowid()").executeQuery()
+            rowId.next()
+            entite.id = rowId.getInt(1)
         }
 
         serviceBD.fermerConnexion()

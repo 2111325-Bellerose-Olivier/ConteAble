@@ -1,7 +1,10 @@
 package com.conteabe.conteabe
 
+import com.conteabe.conteabe.dao.DossierDAO
 import com.conteabe.conteabe.dao.EmployeDAO
+import com.conteabe.conteabe.dao.TacheDossierDAO
 import com.conteabe.conteabe.modele.Employe
+import com.conteabe.conteabe.modele.TacheDossier
 import com.conteabe.conteabe.service.ServiceBD
 import javafx.beans.binding.Bindings
 import javafx.beans.property.BooleanProperty
@@ -11,6 +14,7 @@ import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
 import javafx.scene.control.*
 import javafx.scene.control.cell.CheckBoxListCell
+import java.sql.Time
 import java.time.LocalDate
 import java.util.function.Predicate
 
@@ -92,20 +96,20 @@ class RapportHeuresController(private val contexte: Contexte) {
 
     private fun initializeEmployees() {
         employeesList = FilteredList<Employee>(
-            FXCollections.observableList(
-                EmployeDAO(
-                    contexte.services.getService<ServiceBD>() as ServiceBD
-                ).chargerTout().map { employe -> Employee(this, employe) }
-            )
+                FXCollections.observableList(
+                        EmployeDAO(
+                                contexte.services.getService<ServiceBD>() as ServiceBD
+                        ).chargerTout().map { employe -> Employee(this, employe) }
+                )
         )
 
         val filteredEmployee = FilteredList(employeesList)
 
         filteredEmployee.predicateProperty().bind(
-            Bindings.createObjectBinding(
-                { predicatFiltreEmploye(filtreIdEmployee.text) },
-                filtreIdEmployee.textProperty()
-            )
+                Bindings.createObjectBinding(
+                        { predicatFiltreEmploye(filtreIdEmployee.text) },
+                        filtreIdEmployee.textProperty()
+                )
         )
 
         employees.cellFactory = CheckBoxListCell.forListView()
