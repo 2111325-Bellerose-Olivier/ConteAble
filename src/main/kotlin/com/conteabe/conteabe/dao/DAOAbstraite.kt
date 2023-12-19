@@ -31,10 +31,11 @@ abstract class DAOAbstraite<T>(serviceBD: ServiceBD) where T : Entite {
      *
      * @param insertQuery Une query SQLite
      * @param updateQuery Une query SQLite (le where id est a la fin)
+     * @param updateId l'emplacement a set l'id
      * @param entite l'entite a enregistrer ou modifier
      * @param bindParams Applique les parametres dans la requete (excepter l'id)
      */
-    fun enregistrerEntite(insertQuery: String, updateQuery: String, entite: T, bindParams: (PreparedStatement) -> Unit) {
+    fun enregistrerEntite(insertQuery: String, updateQuery: String, updateId: Int, entite: T, bindParams: (PreparedStatement) -> Unit) {
         val connexion = serviceBD.ouvrirConnexion()
         val estInsertion: Boolean = entite.id == null
 
@@ -44,7 +45,7 @@ abstract class DAOAbstraite<T>(serviceBD: ServiceBD) where T : Entite {
         } else {
             requete =
                     connexion.prepareStatement(updateQuery)
-            requete.setInt(6, entite.id!!)
+            requete.setInt(updateId, entite.id!!)
         }
 
         bindParams.invoke(requete)

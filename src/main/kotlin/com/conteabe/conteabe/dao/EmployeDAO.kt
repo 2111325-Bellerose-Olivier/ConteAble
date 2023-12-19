@@ -25,6 +25,7 @@ class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
         enregistrerEntite(
                 "INSERT INTO Employe (nom, prenom, mdp, id_role, courriel) VALUES (?, ?, ?, ? ,?);",
                 "UPDATE Employe SET nom = ?, prenom = ?, mdp = ?, id_role = ?, courriel = ? WHERE id = ?;",
+                6,
                 entite)
         { requete ->
             requete.setString(1, entite.nom)

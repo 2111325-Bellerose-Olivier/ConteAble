@@ -18,6 +18,7 @@ class TacheDossierDAO(serviceBD: ServiceBD) : DAOAbstraite<TacheDossier>(service
         enregistrerEntite(
                 "INSERT INTO Tache_Dossier (id_dossier, id_employe, nom_tache, duree, montant) VALUES (?, ?, ?, ?, ?);",
                 "UPDATE Tache_Dossier SET id_dossier = ?, id_employe = ?, nom_tache = ?, duree = ?, montant = ? WHERE id = ?",
+                6,
                 entite)
         { requete ->
             requete.setInt(1, entite.dossier.id!!)
