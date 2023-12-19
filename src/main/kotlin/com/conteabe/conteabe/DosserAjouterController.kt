@@ -1,11 +1,8 @@
 package com.conteabe.conteabe
 
-import com.conteabe.conteabe.dao.ClientCompagnieDAO
-import com.conteabe.conteabe.dao.ClientIndividuDAO
+import com.conteabe.conteabe.dao.ClientDAO
 import com.conteabe.conteabe.dao.DossierDAO
 import com.conteabe.conteabe.modele.Client
-import com.conteabe.conteabe.modele.ClientCompagnie
-import com.conteabe.conteabe.modele.ClientIndividu
 import com.conteabe.conteabe.modele.Dossier
 import com.conteabe.conteabe.service.ServiceBD
 import javafx.beans.property.BooleanProperty
@@ -54,27 +51,13 @@ class DosserAjouterController(private val contexte: Contexte) {
         label.isManaged = false
     }
 
-    private fun chargerTousLesClients() : MutableList<Client> {
-        val clientCompagnie: MutableList<ClientCompagnie> = ClientCompagnieDAO(contexte.services.getService<ServiceBD>() as ServiceBD).chargerTout()
-        val clientIndividu: MutableList<ClientIndividu> = ClientIndividuDAO(contexte.services.getService<ServiceBD>() as ServiceBD).chargerTout()
-
-        var clients: MutableList<Client> = mutableListOf()
-        clients.addAll(clientCompagnie)
-        clients.addAll(clientIndividu)
-
-        return clients
-    }
-
-    private fun trouverNomClient(client: Client) : String {
-        return when {
-            client is ClientCompagnie -> client.nom_compagnie
-            client is ClientIndividu -> "${client.prenom} ${client.nom}"
-            else -> "Client Inconnu"
-        }
+    private fun trouverNomClient(client: Client): String {
+        return "${client.prenom} ${client.nom}"
     }
 
     private fun fillComboBox() {
-        val clients: MutableList<Client> = chargerTousLesClients()
+        val clients: MutableList<Client> =
+            ClientDAO(contexte.services.getService<ServiceBD>() as ServiceBD).chargerTout()
 
         if (clients.size == 0) {
             afficherErreur(clientErreur, "Aucun client n'a été trouver dans la base de donnée.")
@@ -105,13 +88,10 @@ class DosserAjouterController(private val contexte: Contexte) {
         if (texte.isEmpty()) {
             afficherErreur(dossierErreur, "Le nom de dossier est requis.")
             erreurForm.set(true)
-        }
-
-        else if (texte.length > 255) {
+        } else if (texte.length > 255) {
             afficherErreur(dossierErreur, "Le nom du dossier ne peut pas faire plus de 255 caractères")
             erreurForm.set(true)
-        }
-        else {
+        } else {
             erreurForm.set(false)
             enleverErreur(dossierErreur)
         }
