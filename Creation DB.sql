@@ -36,6 +36,7 @@ CREATE TABLE Role (
   id integer PRIMARY KEY AUTOINCREMENT,
   nom varchar(255)
 );
+
 INSERT INTO Role(nom) VALUES ("Superviseur");
 
 CREATE TABLE Employe (
@@ -58,3 +59,9 @@ CREATE TABLE Tache_Dossier (
   CONSTRAINT fk_dossier FOREIGN KEY (id_dossier) REFERENCES Dosser(id),
   CONSTRAINT fk_employe FOREIGN KEY (id_employe) REFERENCES Employe(id)
 );
+
+INSERT INTO Client(adresse_civil,  code_postal, ville, province, pays, nom, prenom, courriel, numero_telephone) VALUES ("123 9 Avenue", "A1B 2C3", "Victoriaville", "Québec", "Canada", "Le petit curieux", "George", "banane@gmail.com", "123-456-7890");
+
+INSERT INTO Liste_Tache(nom, taux_horraire) VALUES ("Calculation temps", 20.50);
+INSERT INTO Dossier(id_client, nom) VALUES (1, "Entreprise principale");
+
