@@ -15,36 +15,17 @@ class TacheDossierDAO(serviceBD: ServiceBD) : DAOAbstraite<TacheDossier>(service
         DossierDAO(serviceBD).enregistrer(entite.dossier)
         EmployeDAO(serviceBD).enregistrer(entite.employe)
 
-        val connexion = serviceBD.ouvrirConnexion()
-        val estInsertion: Boolean = entite.id == null
-
-        val requete: PreparedStatement
-        if (estInsertion) {
-            requete = connexion.prepareStatement(
-                    "INSERT INTO Tache_Dossier (id_dossier, id_employe, nom_tache, duree, montant) VALUES (?, ?, ?, ?, ?);",
-                    Statement.RETURN_GENERATED_KEYS
-            )
-        } else {
-            requete =
-                    connexion.prepareStatement("UPDATE Tache_Dossier SET id_dossier = ?, id_employe = ?, nom_tache = ?, duree = ?, montant = ? WHERE id = ?")
-            requete.setInt(6, entite.id!!)
+        enregistrerEntite(
+                "INSERT INTO Tache_Dossier (id_dossier, id_employe, nom_tache, duree, montant) VALUES (?, ?, ?, ?, ?);",
+                "UPDATE Tache_Dossier SET id_dossier = ?, id_employe = ?, nom_tache = ?, duree = ?, montant = ? WHERE id = ?",
+                entite)
+        { requete ->
+            requete.setInt(1, entite.dossier.id!!)
+            requete.setInt(2, entite.employe.id!!)
+            requete.setString(3, entite.nom_tache)
+            requete.setTime(4, entite.duree)
+            requete.setFloat(5, entite.montant)
         }
-
-        requete.setInt(1, entite.dossier.id!!)
-        requete.setInt(2, entite.employe.id!!)
-        requete.setString(3, entite.nom_tache)
-        requete.setTime(4, entite.duree)
-        requete.setFloat(5, entite.montant)
-
-        val requeteReussi = requete.executeUpdate() > 0
-
-        if (requeteReussi && estInsertion) {
-            val rowId = connexion.prepareStatement("SELECT last_insert_rowid()").executeQuery()
-            rowId.next()
-            entite.id = rowId.getInt(1)
-        }
-
-        serviceBD.fermerConnexion()
     }
 
 
