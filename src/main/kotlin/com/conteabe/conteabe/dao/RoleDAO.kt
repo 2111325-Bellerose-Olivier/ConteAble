@@ -18,46 +18,29 @@ import java.sql.Statement
 class RoleDAO(serviceBD: ServiceBD) : DAOAbstraite<Role>(serviceBD) {
 
     override fun enregistrer(entite: Role) {
-        val connexion = serviceBD.ouvrirConnexion()
-        val estInsertion: Boolean = entite.id == null
-
-        val requete: PreparedStatement
-        if (estInsertion) {
-            requete = connexion.prepareStatement(
-                "INSERT INTO Role (nom) VALUES (?);"
-            )
-        } else {
-            requete = connexion.prepareStatement("UPDATE Role SET nom = ? WHERE id = ?;")
-            requete.setInt(2, entite.id!!)
+        enregistrerEntite(
+                "INSERT INTO Role (nom) VALUES (?);",
+                "UPDATE Role SET nom = ? WHERE id = ?;",
+                entite)
+        { requete ->
+            requete.setString(1, entite.nom)
         }
-
-        requete.setString(1, entite.nom)
-
-        requete.executeUpdate()
-
-        if (estInsertion) {
-            val rowId = connexion.prepareStatement("SELECT last_insert_rowid()").executeQuery()
-            rowId.next()
-            entite.id = rowId.getInt(1)
-        }
-
-        serviceBD.fermerConnexion()
     }
 
 
     override fun chargerTout(): MutableList<Role> {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement =
-            connexion.prepareStatement("SELECT id, nom FROM Role")
+                connexion.prepareStatement("SELECT id, nom FROM Role")
         val resultats: ResultSet = requete.executeQuery()
         val employes: MutableList<Role> = mutableListOf()
 
         while (resultats.next()) {
             employes.add(
-                Role(
-                    resultats.getInt("id"),
-                    resultats.getString("nom"),
-                )
+                    Role(
+                            resultats.getInt("id"),
+                            resultats.getString("nom"),
+                    )
             )
         }
         serviceBD.fermerConnexion()
@@ -67,13 +50,13 @@ class RoleDAO(serviceBD: ServiceBD) : DAOAbstraite<Role>(serviceBD) {
     override fun chargerParId(id: Int): Role? {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement =
-            connexion.prepareStatement("SELECT nom FROM Role where id = ?")
+                connexion.prepareStatement("SELECT nom FROM Role where id = ?")
         requete.setInt(1, id)
         val resultats: ResultSet = requete.executeQuery()
 
         val employe: Role? = if (resultats.next()) Role(
-            id,
-            resultats.getString("nom")
+                id,
+                resultats.getString("nom")
         ) else null
         serviceBD.fermerConnexion()
         return employe

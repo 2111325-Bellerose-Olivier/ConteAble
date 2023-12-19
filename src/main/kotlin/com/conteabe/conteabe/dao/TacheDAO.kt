@@ -10,46 +10,31 @@ import com.conteabe.conteabe.modele.Tache
 
 class TacheDAO(serviceBD: ServiceBD) : DAOAbstraite<Tache>(serviceBD) {
     override fun enregistrer(entite: Tache) {
-        val connexion = serviceBD.ouvrirConnexion()
-        val estInsertion: Boolean = entite.id == null
-
-        var requete: PreparedStatement = if (estInsertion) {
-            connexion.prepareStatement(
-                "INSERT INTO List_Tache (nom, tauxHorraire) VALUES (?, ?);"
-            )
-        } else {
-            connexion.prepareStatement("UPDATE List_Tache SET nom = ?, taucHorraire = ?")
+        enregistrerEntite(
+                "INSERT INTO List_Tache (nom, tauxHorraire) VALUES (?, ?);",
+                "UPDATE List_Tache SET nom = ?, taucHorraire = ?",
+                entite)
+        { requete ->
+            requete.setString(1, entite.nom)
+            requete.setFloat(2, entite.taucHorraire)
         }
-
-        requete.setString(1, entite.nom)
-        requete.setFloat(2, entite.taucHorraire)
-
-        requete.executeUpdate()
-
-        if (estInsertion) {
-            val rowId = connexion.prepareStatement("SELECT last_insert_rowid()").executeQuery()
-            rowId.next()
-            entite.id = rowId.getInt(1)
-        }
-
-        serviceBD.fermerConnexion()
     }
 
 
     override fun chargerTout(): MutableList<Tache> {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement =
-            connexion.prepareStatement("SELECT id, nom, taux_horraire FROM Liste_Tache")
+                connexion.prepareStatement("SELECT id, nom, taux_horraire FROM Liste_Tache")
         val resultats: ResultSet = requete.executeQuery()
         val taches: MutableList<Tache> = mutableListOf()
 
         while (resultats.next()) {
             taches.add(
-                Tache(
-                    resultats.getInt("id"),
-                    resultats.getString("nom"),
-                    resultats.getFloat("taux_horraire"),
-                )
+                    Tache(
+                            resultats.getInt("id"),
+                            resultats.getString("nom"),
+                            resultats.getFloat("taux_horraire"),
+                    )
             )
         }
         serviceBD.fermerConnexion()
@@ -59,14 +44,14 @@ class TacheDAO(serviceBD: ServiceBD) : DAOAbstraite<Tache>(serviceBD) {
     override fun chargerParId(id: Int): Tache? {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement =
-            connexion.prepareStatement("SELECT id, nom, taux_horraire FROM Liste_Tache where id = ?")
+                connexion.prepareStatement("SELECT id, nom, taux_horraire FROM Liste_Tache where id = ?")
         requete.setInt(1, id)
         val resultats: ResultSet = requete.executeQuery()
 
         val tache: Tache? = if (resultats.next()) Tache(
-            resultats.getInt("id"),
-            resultats.getString("nom"),
-            resultats.getFloat("taux_horraire"),
+                resultats.getInt("id"),
+                resultats.getString("nom"),
+                resultats.getFloat("taux_horraire"),
         ) else null
         serviceBD.fermerConnexion()
         return tache
