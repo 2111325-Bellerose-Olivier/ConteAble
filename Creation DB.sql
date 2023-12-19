@@ -1,68 +1,99 @@
+DROP TABLE IF EXISTS Personne_Contact;
+DROP TABLE IF EXISTS Client_Individu;
+DROP TABLE IF EXISTS Client;
+DROP TABLE IF EXISTS Tache_Effectuee;
+DROP TABLE IF EXISTS Employe;
+DROP TABLE IF EXISTS Role;
+DROP TABLE IF EXISTS Liste_Tache;
+DROP TABLE IF EXISTS Dossier;
+DROP TABLE IF EXISTS Tache_Dossier;
+DROP TABLE IF EXISTS Personne_Contact;
+DROP TABLE IF EXISTS Client_Individu;
+DROP TABLE IF EXISTS Client_Compagnie;
+DROP TABLE IF EXISTS Client;
+
+
+CREATE TABLE Personne_Contact(
+  id integer PRIMARY KEY AUTOINCREMENT,
+  nom varchar(255),
+  prenom varchar(255),
+  courriel varchar(255),
+  numero_telephone varchar(15)
+);
+
 CREATE TABLE Client (
-    id INT NOT NULL,
-    nom varchar(255),
-    prenom varchar(255),
-    courriel varchar(255),
-    tel varchar(255),
-    code_postal varchar(255),
-    adresse varchar(255),
-    pays varchar(255),
-    province varchar(255),
-    PRIMARY KEY (id)
+  id integer PRIMARY KEY AUTOINCREMENT,
+  adresse_civil varchar(255),
+  code_postal varchar(255),
+  ville varchar(255),
+  province varchar(255),
+  pays varchar(255)
+);
+
+CREATE TABLE Client_Individu(
+  id integer PRIMARY KEY AUTOINCREMENT,
+  nom varchar(255),
+  prenom varchar(255),
+  courriel varchar(255),
+  numero_telephone varchar(15),
+  id_client int,
+  CONSTRAINT fk_client_individu FOREIGN KEY (id_client) REFERENCES Client(id)
+);
+
+CREATE TABLE Client_Compagnie(
+  id integer PRIMARY KEY AUTOINCREMENT,
+  nom_compagnie VARCHAR(255),
+  numero_compagnie INT,
+  personne_contact INT,
+  id_client INT,
+  CONSTRAINT fk_client_compagnie FOREIGN KEY (id_client) REFERENCES Client(id),
+  CONSTRAINT fk_personne_contact FOREIGN KEY (personne_contact) REFERENCES PersonneContact(id)
 );
 
 CREATE TABLE Dossier (
-    id int NOT NULL,
-    id_client int NOT NULL,
-    nom varchar(255),
-    PRIMARY KEY (id),
-    CONSTRAINT fk_client FOREIGN KEY (id_client) REFERENCES Client(id)
+  id integer PRIMARY KEY AUTOINCREMENT,
+  id_client int NOT NULL,
+  nom varchar(255),
+  CONSTRAINT fk_client FOREIGN KEY (id_client) REFERENCES Client(id)
 );
 
-CREATE TABLE List_Tache (
-    id int NOT NULL,
-    nom varchar(255),
-    taux_horraire float(6,2),
-    PRIMARY KEY (id)
-);
+CREATE TABLE Liste_Tache(
+  id integer PRIMARY KEY AUTOINCREMENT,
+  nom varchar(255),
+  taux_horraire float(6,2)
+  );
 
 CREATE TABLE Tache_Dossier (
-    id int NOT NULL,
-    id_dossier int NOT NULL,
-    id_tache int NOT NULL,
-    PRIMARY KEY (id),
-    CONSTRAINT fk_dossier FOREIGN KEY (id_dossier) REFERENCES Dossier(id),
-    CONSTRAINT fk_liste_tache FOREIGN KEY (id_tache) REFERENCES Liste_Tache(id)
- );
-
- CREATE TABLE Role (
-    id int NOT NULL,
-    nom varchar(255),
-    PRIMARY KEY (id)
- );
-
- CREATE TABLE Employe (
-    id int NOT NULL,
-    nom varchar(255),
-    prenom varchar(255),
-    mdp varchar(255),
-    id_role int,
-    courriel varchar(255),
-    PRIMARY KEY (id),
-    CONSTRAINT fk_role FOREIGN KEY (id_role) REFERENCES Role(id)
- );
-
-CREATE TABLE Tache_Effectuee(
-    id int NOT NULL,
-    id_tache int NOT NULL,
-    id_employe int NOT NULL,
-    date datetime,
-    heure_debut datetime,
-    heure_fin datetime,
-    taux_horraire float(6,2),
-    PRIMARY KEY (id),
-    CONSTRAINT fk_tache FOREIGN KEY (id_tache) REFERENCES Tache_Dossier(id),
-    CONSTRAINT fk_employe FOREIGN KEY (id_employe) REFERENCES Employe(id)
+  id integer PRIMARY KEY AUTOINCREMENT,
+  id_dossier int,
+  id_tache int,
+  CONSTRAINT fk_dossier FOREIGN KEY (id_dossier) REFERENCES Dossier(id),
+  CONSTRAINT fk_liste_tache FOREIGN KEY (id_tache) REFERENCES Liste_Tache(id)
 );
 
- 
+CREATE TABLE Role (
+  id integer PRIMARY KEY AUTOINCREMENT,
+  nom varchar(255)
+);
+
+CREATE TABLE Employe (
+  id integer PRIMARY KEY AUTOINCREMENT,
+  nom varchar(255),
+  prenom varchar(255),
+  mdp varchar(255),
+  id_role int,
+  courriel varchar(255),
+  CONSTRAINT fk_role FOREIGN KEY (id_role) REFERENCES Role(id)
+);
+
+CREATE TABLE Tache_Effectuee(
+  id integer PRIMARY KEY AUTOINCREMENT,
+  id_tache int,
+  id_employe int,
+  date datetime,
+  heure_debut datetime,
+  heure_fin datetime,
+  taux_horraire float(6,2),
+  CONSTRAINT fk_tache FOREIGN KEY (id_tache) REFERENCES Tache_Dossier(id),
+  CONSTRAINT fk_employe FOREIGN KEY (id_employe) REFERENCES Employe(id)
+);

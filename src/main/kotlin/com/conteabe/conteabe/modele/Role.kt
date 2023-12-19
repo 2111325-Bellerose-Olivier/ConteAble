@@ -10,23 +10,16 @@ import com.conteabe.conteabe.dao.Entite
  * @author Alexandre
  * @since 06/05/2023
  */
-class Employe(
+class Role(
     id: Int?,
-    var nom: String,
-    var prenom: String,
-    var mdp: String,
-    var role: Role,
-    var courriel: String
+    var nom: String
 ) :
     Entite(id) {
-
     override fun equals(other: Any?): Boolean {
         return other is Employe && equals(other)
     }
 
-    fun equals(other: Employe): Boolean {
-        return id == other.id && nom == other.nom &&
-                prenom == other.prenom && mdp == other.mdp &&
-                role.equals(other.role) && courriel == other.courriel
+    fun equals(other: Role): Boolean {
+        return id == other.id && nom == other.nom
     }
 }
