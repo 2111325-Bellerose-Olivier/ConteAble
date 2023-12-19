@@ -1,129 +1,167 @@
 package com.conteabe.conteabe
 
+import com.conteabe.conteabe.dao.DossierDAO
+import com.conteabe.conteabe.dao.EmployeDAO
+import com.conteabe.conteabe.dao.TacheDossierDAO
+import com.conteabe.conteabe.modele.Employe
+import com.conteabe.conteabe.modele.TacheDossier
+import com.conteabe.conteabe.service.ServiceBD
 import javafx.beans.binding.Bindings
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.FXCollections
-import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
-import javafx.scene.control.DatePicker
-import javafx.scene.control.Label
-import javafx.scene.control.ListView
-import javafx.scene.control.TextField
+import javafx.scene.control.*
 import javafx.scene.control.cell.CheckBoxListCell
+import java.sql.Time
 import java.time.LocalDate
 import java.util.function.Predicate
 
 
-class RapportHeuresController {
+class RapportHeuresController(private val contexte: Contexte) {
     @FXML
-    private lateinit var beginDate: DatePicker
+    private lateinit var dateDebut: DatePicker
 
     @FXML
-    private lateinit var beginValidation: Label
+    private lateinit var validationDebut: Label
 
     @FXML
-    private lateinit var endDate: DatePicker
+    private lateinit var dateFin: DatePicker
 
     @FXML
-    private lateinit var endValidation: Label
+    private lateinit var validationFin: Label
 
     @FXML
-    private lateinit var employeeFilter: TextField
+    private lateinit var genere: Button
+
+    @FXML
+    private lateinit var filtreIdEmployee: TextField
 
     @FXML
     private lateinit var employees: ListView<Employee>
 
-    private lateinit var employeesList: ObservableList<Employee>
+    private lateinit var employeesList: FilteredList<Employee>
+
+    internal var selectedEmploye: Employee? = null
 
     fun initialize() {
         initializeDates()
         initializeEmployees()
+        updateGenerateEnabality()
     }
 
     private fun initializeDates() {
-        val today = LocalDate.now()
-        var diffVendredi = (today.dayOfWeek.value.toLong() + 2) % 7
+        val aujourdhui = LocalDate.now()
 
-        if (diffVendredi == 0L) {//Si vendredi prendre le vendredi passé
-            diffVendredi = 7
+        var jourApresVendredi = (aujourdhui.dayOfWeek.value + 2) % 7
+        if (jourApresVendredi == 0) { // Si vendredi, prendre le vendredi passé
+            jourApresVendredi = 7
         }
 
-        val endOfPreviousWeek = today.minusDays(diffVendredi)
+        val endOfPreviousWeek = aujourdhui.minusDays(jourApresVendredi.toLong())
         val startOfPreviousWeek = endOfPreviousWeek.minusDays(4)
 
-        beginDate.setValue(startOfPreviousWeek)
-        endDate.setValue(endOfPreviousWeek)
+        dateDebut.value = startOfPreviousWeek
+        dateFin.value = endOfPreviousWeek
 
 
-        beginDate.valueProperty().addListener { _, _, newValue ->
+        dateDebut.valueProperty().addListener { _, _, newValue ->
             if (newValue != null) {
-                if (newValue.isBefore(endDate.value)) {
-                    beginValidation.setText("")
+                if (newValue.isBefore(dateFin.value)) {
+                    validationDebut.text = ""
                 } else {
-                    beginValidation.setText("La date de debut est après la date de fin.")
+                    validationDebut.text = "La date de debut est après la date de fin."
                 }
+                updateGenerateEnabality()
             }
         }
-        endDate.valueProperty().addListener { _, _, newValue ->
+        dateFin.valueProperty().addListener { _, _, newValue ->
             if (newValue != null) {
-                if (beginDate.value.isBefore(newValue)) {
-                    beginValidation.setText("")
+                if (dateDebut.value.isBefore(newValue)) {
+                    validationDebut.text = ""
                 } else {
-                    beginValidation.setText("La date de debut est après la date de fin.")
+                    validationDebut.text = "La date de debut est après la date de fin."
                 }
 
                 if (newValue.isBefore(LocalDate.now())) {
-                    endValidation.setText("")
+                    validationFin.text = ""
                 } else {
-                    endValidation.setText("La date de fin n'est pas encore passée.")
+                    validationFin.text = "La date de fin n'est pas encore passée."
                 }
+                updateGenerateEnabality()
             }
         }
     }
 
     private fun initializeEmployees() {
-        employeesList =
-            FXCollections.observableArrayList(arrayOf("Bonjour", "Allo").map { element -> Employee(element) })
+        employeesList = FilteredList<Employee>(
+                FXCollections.observableList(
+                        EmployeDAO(
+                                contexte.services.getService<ServiceBD>() as ServiceBD
+                        ).chargerTout().map { employe -> Employee(this, employe) }
+                )
+        )
+
         val filteredEmployee = FilteredList(employeesList)
 
         filteredEmployee.predicateProperty().bind(
-            Bindings.createObjectBinding(
-                { createFilterPredicate(employeeFilter.text) },
-                employeeFilter.textProperty()
-            )
+                Bindings.createObjectBinding(
+                        { predicatFiltreEmploye(filtreIdEmployee.text) },
+                        filtreIdEmployee.textProperty()
+                )
         )
 
-        employees.setCellFactory(CheckBoxListCell.forListView
-        { item -> item.selectedProperty() })
-        employees.getSelectionModel().selectedItemProperty().addListener()
-        { _, oldValue, newValue ->
-            oldValue?.setSelected(false)
-            newValue?.setSelected(true)
+        employees.cellFactory = CheckBoxListCell.forListView()
+        { item -> item.selectedProperty() }
+        employees.selectionModel.selectedItemProperty().addListener()
+        { observedEmlpoye, _, _ ->
+            val employee = observedEmlpoye.value
+            employee ?: return@addListener
+            employee.setSelected(!employee.isSelected())
         }
 
         employees.items = filteredEmployee
     }
 
-    private fun createFilterPredicate(filterText: String): Predicate<Employee> {
+    private fun predicatFiltreEmploye(textFiltre: String): Predicate<Employee> {
         return Predicate { item ->
-            filterText.isEmpty() || item.text.contains(filterText, ignoreCase = true)
+            textFiltre.isEmpty() || item.toString().contains(textFiltre, ignoreCase = true)
         }
+    }
+
+    internal fun updateGenerateEnabality() {
+        genere.isDisable = validationDebut.text != "" ||
+                validationFin.text != "" ||
+                employeSelectionne() == null
+    }
+
+    private fun employeSelectionne(): Employe? {
+        val employe: Employee? = selectedEmploye
+        employe ?: return null
+        if (!employees.items.contains(employe))
+            return null
+        return employe.employe
     }
 
     @FXML
     private fun generate() {
-
+        val employe: Employe = employeSelectionne() ?: return
+        contexte.PrintScreen(Page.__PrintHeuresEmploye, employe)
     }
 }
 
 
-class Employee(val text: String) {
+class Employee(private val controller: RapportHeuresController, val employe: Employe) {
     private val selected: BooleanProperty
 
     init {
         selected = SimpleBooleanProperty(false)
+        selected.addListener { _, _, newValue ->
+            controller.selectedEmploye?.setSelected(false)
+            controller.selectedEmploye = if (newValue) this else null
+            controller.updateGenerateEnabality()
+        }
     }
 
     fun selectedProperty(): BooleanProperty {
@@ -139,6 +177,6 @@ class Employee(val text: String) {
     }
 
     override fun toString(): String {
-        return text
+        return employe.nom + " " + employe.prenom
     }
 }

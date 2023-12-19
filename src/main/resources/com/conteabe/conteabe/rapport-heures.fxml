@@ -3,17 +3,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.conteabe.conteabe.RapportHeuresController">
+<HBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
     <VBox>
-        <TextField fx:id="employeeFilter"/>
+        <TextField fx:id="filtreIdEmployee"/>
         <ListView fx:id="employees"/>
     </VBox>
     <VBox>
-        <DatePicker fx:id="beginDate"/>
-        <Label fx:id="beginValidation"/>
-        <DatePicker fx:id="endDate"/>
-        <Label fx:id="endValidation"/>
-        <Button onAction="#generate">Générer</Button>
+        <DatePicker fx:id="dateDebut"/>
+        <Label fx:id="validationDebut"/>
+        <DatePicker fx:id="dateFin"/>
+        <Label fx:id="validationFin"/>
+        <Button fx:id="genere" onAction="#generate">Générer</Button>
     </VBox>
 </HBox>
