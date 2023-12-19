@@ -38,9 +38,9 @@ class CreationEmployeController(private val contexte: Contexte) {
 
     fun initialize() {
         role.items = FXCollections.observableList(
-            RoleDAO(
-                contexte.services.getService<ServiceBD>() as ServiceBD
-            ).chargerTout()
+                RoleDAO(
+                        contexte.services.getService<ServiceBD>() as ServiceBD
+                ).chargerTout()
         )
     }
 
@@ -51,17 +51,17 @@ class CreationEmployeController(private val contexte: Contexte) {
 
     @FXML
     private fun cree() {
-        val role_id = role.selectionModel.selectedItem?.id
-        if (role_id == null) {
+        val role: Role? = role.selectionModel.selectedItem
+        if (role == null) {
             validation.text = "Il faut selectionner son role"
             return
         }
 
         val employe =
-            Employe(null, nom.text, prenom.text, BCrypt.hashpw(password.text, BCrypt.gensalt()), role_id, courriel.text)
+                Employe(null, nom.text, prenom.text, BCrypt.hashpw(password.text, BCrypt.gensalt()), role, courriel.text)
 
         EmployeDAO(
-            contexte.services.getService<ServiceBD>() as ServiceBD
+                contexte.services.getService<ServiceBD>() as ServiceBD
         ).enregistrer(employe)
 
         if (employe.id == null) {
