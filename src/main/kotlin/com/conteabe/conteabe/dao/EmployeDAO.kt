@@ -1,11 +1,10 @@
 package com.conteabe.conteabe.dao
 
 import com.conteabe.conteabe.modele.Employe
+import com.conteabe.conteabe.modele.Role
 import com.conteabe.conteabe.service.ServiceBD
 import java.sql.PreparedStatement
 import java.sql.ResultSet
-import java.sql.SQLException
-import java.sql.Statement
 
 
 /**
@@ -19,55 +18,42 @@ import java.sql.Statement
 class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
 
     override fun enregistrer(entite: Employe) {
-        val connexion = serviceBD.ouvrirConnexion()
-        val estInsertion: Boolean = entite.id == null
+        RoleDAO(serviceBD).enregistrer(entite.role)
 
-        val requete: PreparedStatement
-        if (estInsertion) {
-            requete = connexion.prepareStatement(
+        enregistrerEntite(
                 "INSERT INTO Employe (nom, prenom, mdp, id_role, courriel) VALUES (?, ?, ?, ? ,?);",
-                Statement.RETURN_GENERATED_KEYS
-            )
-        } else {
-            requete = connexion.prepareStatement("UPDATE Employe SET nom = ?, prenom = ?, mdp = ?, id_role = ?, courriel = ? WHERE id = ?;")
-            requete.setInt(6, entite.id!!)
+                "UPDATE Employe SET nom = ?, prenom = ?, mdp = ?, id_role = ?, courriel = ? WHERE id = ?;",
+                entite)
+        { requete ->
+            requete.setString(1, entite.nom)
+            requete.setString(2, entite.prenom)
+            requete.setString(3, entite.mdp)
+            requete.setInt(4, entite.role.id!!)
+            requete.setString(5, entite.courriel)
         }
-
-        requete.setString(1, entite.nom)
-        requete.setString(2, entite.prenom)
-        requete.setString(3, entite.mdp)
-        requete.setInt(4, entite.id_role)
-        requete.setString(5, entite.courriel)
-
-        val requeteReussi = requete.executeUpdate() > 0
-
-        if (requeteReussi && estInsertion) {
-            val rowId = connexion.prepareStatement("SELECT last_insert_rowid()").executeQuery()
-            rowId.next()
-            entite.id = rowId.getInt(1)
-        }
-
-        serviceBD.fermerConnexion()
     }
 
 
     override fun chargerTout(): MutableList<Employe> {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement =
-            connexion.prepareStatement("SELECT id, nom, prenom, mdp, id_role, courriel FROM Employe")
+                connexion.prepareStatement("SELECT e.id, e.nom, e.prenom, e.mdp, r.id AS role_id, r.nom AS role_name, e.courriel FROM Employe e INNER JOIN Role r ON e.id_role = r.id")
         val resultats: ResultSet = requete.executeQuery()
         val employes: MutableList<Employe> = mutableListOf()
 
         while (resultats.next()) {
             employes.add(
-                Employe(
-                    resultats.getInt("id"),
-                    resultats.getString("nom"),
-                    resultats.getString("prenom"),
-                    resultats.getString("mdp"),
-                    resultats.getInt("id_role"),
-                    resultats.getString("courriel")
-                )
+                    Employe(
+                            resultats.getInt("id"),
+                            resultats.getString("nom"),
+                            resultats.getString("prenom"),
+                            resultats.getString("mdp"),
+                            Role(
+                                    resultats.getInt("role_id"),
+                                    resultats.getString("role_nom")
+                            ),
+                            resultats.getString("courriel")
+                    )
             )
         }
         serviceBD.fermerConnexion()
@@ -77,17 +63,20 @@ class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
     override fun chargerParId(id: Int): Employe? {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement =
-            connexion.prepareStatement("SELECT id, nom, prenom, mdp, id_role, courriel FROM Employe where id = ?")
+                connexion.prepareStatement("SELECT e.id, e.nom, e.prenom, e.mdp, r.id AS role_id, r.nom AS role_nom, e.courriel FROM Employe e INNER JOIN Role r ON e.id_role = r.id WHERE e.id = ?")
         requete.setInt(1, id)
         val resultats: ResultSet = requete.executeQuery()
 
         val employe: Employe? = if (resultats.next()) Employe(
-            resultats.getInt("id"),
-            resultats.getString("nom"),
-            resultats.getString("prenom"),
-            resultats.getString("mdp"),
-            resultats.getInt("id_role"),
-            resultats.getString("courriel")
+                resultats.getInt("id"),
+                resultats.getString("nom"),
+                resultats.getString("prenom"),
+                resultats.getString("mdp"),
+                Role(
+                        resultats.getInt("role_id"),
+                        resultats.getString("role_nom")
+                ),
+                resultats.getString("courriel")
         ) else null
         serviceBD.fermerConnexion()
         return employe
