@@ -85,8 +85,16 @@ class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
         return employe
     }
 
-    override fun supprimer(id: Int): Boolean? {
-        return false;
-    }
+    override fun supprimer(id: Int): Boolean{
+        val connexion = serviceBD.ouvrirConnexion()
+        val requete: PreparedStatement =
+            connexion.prepareStatement("DELETE FROM Employe WHERE id= ?")
+        requete.setInt(1, id)
+        val resultats: ResultSet = requete.executeQuery()
 
+        serviceBD.fermerConnexion()
+
+        return false
+
+    }
 }

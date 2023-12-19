@@ -35,43 +35,6 @@
                     <TableColumn prefWidth="75.0" text="tauxHorraire" fx:id="tauxHorraire" editable="false"/>
                 </columns>
             </TableView>
-
-            <TableView fx:id="listeDossier">
-                <columns>
-                    <TableColumn prefWidth="30.0" text="id" fx:id="idDossier" editable="false"/>
-                    <TableColumn prefWidth="75.0" text="client" fx:id="idClient" editable="false"/>
-                    <TableColumn prefWidth="75.0" text="nom" fx:id="nomDossier" editable="false"/>
-                </columns>
-            </TableView>
-        </VBox>
-        <VBox spacing="10.0">
-            <Text lineSpacing="20.0">Ajouter une tâche</Text>
-
-            <Label text="Nom*"/>
-            <TextField fx:id="nomDossierAjout"/>
-
-            <Label text="Taux horraire*"/>
-            <DoubleField fx:id="tauxHorraireAjout"/>
-
-            <Label text="Id du dossier*"/>
-            <IntegerField fx:id="idDossierAjout"/>
-
-            <Label fx:id="Ajouter"/>
-            <Button text="Ajouter!" onAction="#ajouter"/>
-
-            <Text lineSpacing="20.0">Modifier une tâche</Text>
-
-            <Label text="id*"/>
-            <IntegerField fx:id="idTacheModifier"/>
-
-            <Label text="Nom tache*"/>
-            <TextField fx:id="nomTacheModifier"/>
-
-            <Label text="Taux horraire*"/>
-            <DoubleField fx:id="tauxHorraireModifier"/>
-
-            <Label fx:id="Modifier"/>
-            <Button text="Modifier" onAction="#modifier"/>
         </VBox>
     </HBox>
 </VBox>

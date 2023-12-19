@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.GridPane?>
+
+<?import javafx.scene.control.Button?>
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx" stylesheets="@erreur-field.css">
+    <VBox>
+        <Button onMouseClicked="#retourBouttonClicked">Retour</Button>
+    </VBox>
+
+    <ImageView>
+        <Image url="@Logo.jpg"/>
+    </ImageView>
+
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <Label style="-fx-font: NORMAL 20 Tahoma;" text="Création de Dossiers"/>
+
+    <VBox maxWidth="600" spacing="10">
+        <VBox.margin>
+            <Insets top="40" />
+        </VBox.margin>
+
+        <Label style="-fx-font: NORMAL 16 Tahoma;" text="Informations sur le client" />
+
+        <GridPane alignment="CENTER_LEFT" hgap="10" vgap="10">
+
+            <!-- Nom Field -->
+            <Label text="Nom du Dossier :" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="2">
+                <TextField fx:id="dossierField" onKeyReleased="#nomDossierOnChange"/>
+                <Label fx:id="dossierErreur" style="-fx-text-fill: red;" visible="false" managed="false" />
+            </VBox>
+
+            <!-- Client Field -->
+            <Label text="Client :" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="2">
+                <ComboBox fx:id="clientField"/>
+                <Label fx:id="clientErreur" style="-fx-text-fill: red;" visible="false" managed="false" />
+            </VBox>
+
+        </GridPane>
+    </VBox>
+
+    <VBox alignment="CENTER_RIGHT">
+        <Button fx:id="bouttonEnregister" onMouseClicked="#enregistrerDossier">Enregistrer</Button>
+        <Label fx:id="messageSucces" visible="false" />
+    </VBox>
+</VBox>

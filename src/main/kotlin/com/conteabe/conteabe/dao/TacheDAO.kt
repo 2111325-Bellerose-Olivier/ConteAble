@@ -7,6 +7,8 @@ import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Statement
 import com.conteabe.conteabe.modele.Tache
+import javafx.scene.control.TableColumn
+import java.util.logging.Logger
 
 class TacheDAO(serviceBD: ServiceBD) : DAOAbstraite<Tache>(serviceBD) {
     override fun enregistrer(entite: Tache) {
@@ -60,5 +62,38 @@ class TacheDAO(serviceBD: ServiceBD) : DAOAbstraite<Tache>(serviceBD) {
 
     override fun supprimer(id: Int): Boolean {
         return false;
+    }
+
+    fun insererTableTacheDossier(idDossier: Int, idTache: Int) {
+        val connexion = serviceBD.ouvrirConnexion()
+
+        val requete: PreparedStatement = try {
+            connexion.prepareStatement(
+                "INSERT INTO Tache_Dossier (id_dossier, id_tache) VALUES (?, ?);",
+                Statement.RETURN_GENERATED_KEYS
+            )
+        } catch (e: SQLException) {
+            Logger.getLogger(TacheDAO::class.java.name).severe("Erreur requete: ${e.message}")
+            throw e
+        }
+
+        requete.setInt(1, idDossier)
+        requete.setInt(2, idTache)
+
+        requete.executeUpdate()
+
+        serviceBD.fermerConnexion()
+    }
+
+    fun trouverdernierinseree(): Int {
+        val connexion = serviceBD.ouvrirConnexion()
+        val requete: PreparedStatement =
+            connexion.prepareStatement("SELECT id FROM List_Tache ORDER BY id DESC LIMIT 1")
+        val resultats: ResultSet = requete.executeQuery()
+
+        val id: Int = resultats.getInt("id");
+
+        serviceBD.fermerConnexion()
+        return id
     }
 }

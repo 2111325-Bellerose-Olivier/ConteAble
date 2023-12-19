@@ -16,7 +16,16 @@ enum class Page(val view: String, val constructor: KFunction<*>) {
         "hello-view.fxml",
         HelloController::class.primaryConstructor!!
     ),
-    Employe(
+    AjouterEmploye(
+      "./GererEmployeFXML/ajouter-employe.fxml",
+        AjouterEmployeController::class.primaryConstructor!!
+    ),
+
+    SupprimerEmploye(
+        "./GererEmployeFXML/supprimer-employe.fxml",
+        SupprimerEmployeController::class.primaryConstructor!!
+    ),
+    Tache(
         "tache.fxml",
         TacheController::class.primaryConstructor!!
     ),
@@ -27,5 +36,17 @@ enum class Page(val view: String, val constructor: KFunction<*>) {
     __PrintHeuresEmploye(
         "print-heures-employe.fxml",
         PrintHeuresEmployeController::class.primaryConstructor!!
+    ),
+    Dossier(
+        "dossier-view.fxml",
+        DossierController::class.primaryConstructor!!
+    ),
+    AjouterDossier(
+        "dossier-ajouter.fxml",
+        DosserAjouterController::class.primaryConstructor!!
+    ),
+    AjoutHeures(
+        "ajout-heure.fxml",
+        AjoutHeure::class.primaryConstructor!!
     )
 }

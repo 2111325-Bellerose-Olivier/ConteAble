@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.DialogPane?>
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx">
+
+    <ImageView>
+        <Image url="@Logo.jpg"/>
+    </ImageView>
+
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <Label style="-fx-font: NORMAL 20 Tahoma;" text="Dossiers"/>
+
+    <TableView fx:id="listeDossiers">
+        <columns>
+            <TableColumn prefWidth="200.0" text="Nom du Client" fx:id="nomClients" editable="false"/>
+            <TableColumn prefWidth="250.0" text="Nom du Dossier" fx:id="nomDossiers" editable="false"/>
+        </columns>
+    </TableView>
+
+    <HBox alignment="CENTER" spacing="50.0">
+        <Button text="Ajouter" onMouseClicked="#ChangerPage"/>
+        <Button text="Modifier" />
+    </HBox>
+
+    <Label fx:id="messageErreur" style="-fx-text-fill: red" visible="false">Aucun client n'est selectionée</Label>
+</VBox>
