@@ -1,24 +1,9 @@
-DROP TABLE IF EXISTS Personne_Contact;
-DROP TABLE IF EXISTS Client_Individu;
-DROP TABLE IF EXISTS Client;
-DROP TABLE IF EXISTS Tache_Effectuee;
+DROP TABLE IF EXISTS Tache_Dossier;
 DROP TABLE IF EXISTS Employe;
 DROP TABLE IF EXISTS Role;
 DROP TABLE IF EXISTS Liste_Tache;
 DROP TABLE IF EXISTS Dossier;
-DROP TABLE IF EXISTS Tache_Dossier;
-DROP TABLE IF EXISTS List_Tache;
-DROP TABLE IF EXISTS Dossier;
 DROP TABLE IF EXISTS Client;
-
-
-CREATE TABLE Personne_Contact(
-  id integer PRIMARY KEY AUTOINCREMENT,
-  nom varchar(255),
-  prenom varchar(255),
-  courriel varchar(255),
-  numero_telephone varchar(15)
-);
 
 CREATE TABLE Client (
   id integer PRIMARY KEY AUTOINCREMENT,
@@ -26,27 +11,12 @@ CREATE TABLE Client (
   code_postal varchar(255),
   ville varchar(255),
   province varchar(255),
-  pays varchar(255)
-);
+  pays varchar(255),
 
-CREATE TABLE Client_Individu(
-  id integer PRIMARY KEY AUTOINCREMENT,
   nom varchar(255),
   prenom varchar(255),
   courriel varchar(255),
-  numero_telephone varchar(15),
-  id_client int,
-  CONSTRAINT fk_client_individu FOREIGN KEY (id_client) REFERENCES Client(id)
-);
-
-CREATE TABLE Client_Compagnie(
-  id integer PRIMARY KEY AUTOINCREMENT,
-  nom_compagnie VARCHAR(255),
-  numero_compagnie INT,
-  personne_contact INT,
-  id_client INT,
-  CONSTRAINT fk_client_compagnie FOREIGN KEY (id_client) REFERENCES Client(id),
-  CONSTRAINT fk_personne_contact FOREIGN KEY (personne_contact) REFERENCES PersonneContact(id)
+  numero_telephone varchar(15)
 );
 
 CREATE TABLE Dossier (
@@ -62,19 +32,10 @@ CREATE TABLE Liste_Tache(
   taux_horraire float(6,2)
   );
 
-CREATE TABLE Tache_Dossier (
-  id integer PRIMARY KEY AUTOINCREMENT,
-  id_dossier int,
-  id_tache int,
-  CONSTRAINT fk_dossier FOREIGN KEY (id_dossier) REFERENCES Dossier(id),
-  CONSTRAINT fk_liste_tache FOREIGN KEY (id_tache) REFERENCES Liste_Tache(id)
-);
-
 CREATE TABLE Role (
   id integer PRIMARY KEY AUTOINCREMENT,
   nom varchar(255)
 );
-INSERT INTO Role(nom) VALUES ("Superviseur");
 
 CREATE TABLE Employe (
   id integer PRIMARY KEY AUTOINCREMENT,
@@ -86,14 +47,23 @@ CREATE TABLE Employe (
   CONSTRAINT fk_role FOREIGN KEY (id_role) REFERENCES Role(id)
 );
 
-CREATE TABLE Tache_Effectuee(
-  id integer PRIMARY KEY AUTOINCREMENT,
-  id_tache int,
-  id_employe int,
-  date datetime,
-  heure_debut datetime,
-  heure_fin datetime,
-  taux_horraire float(6,2),
-  CONSTRAINT fk_tache FOREIGN KEY (id_tache) REFERENCES Tache_Dossier(id),
+CREATE TABLE Tache_Dossier (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id_dossier INTEGER,
+  id_employe INTEGER,
+  nom_tache varchar(255),
+  duree time,
+  montant float(6,2),
+  CONSTRAINT fk_dossier FOREIGN KEY (id_dossier) REFERENCES Dossier(id),
   CONSTRAINT fk_employe FOREIGN KEY (id_employe) REFERENCES Employe(id)
 );
+
+INSERT INTO Role(nom) VALUES ("Superviseur");
+INSERT INTO Role(nom) VALUES ("Employe");
+
+INSERT INTO Client(adresse_civil,  code_postal, ville, province, pays, nom, prenom, courriel, numero_telephone) VALUES ("123 9 Avenue", "A1B 2C3", "Victoriaville", "Québec", "Canada", "Le petit curieux", "George", "banane@gmail.com", "123-456-7890");
+
+INSERT INTO Liste_Tache(nom, taux_horraire) VALUES ("Calculation temps", 20.50);
+INSERT INTO Dossier(id_client, nom) VALUES (1, "Entreprise principale");
+
+INSERT INTO Employe(nom, prenom, mdp, id_role, courriel) VALUES ("test", "test", "$2a$10$48e9p/yZH3fvSMLypKiRseW/bTfXMK55N7PKBV9PiwcgUrtqgYWBC", 1, "test");

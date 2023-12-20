@@ -13,12 +13,13 @@ import java.util.logging.Logger
 class TacheDAO(serviceBD: ServiceBD) : DAOAbstraite<Tache>(serviceBD) {
     override fun enregistrer(entite: Tache) {
         enregistrerEntite(
-                "INSERT INTO List_Tache (nom, tauxHorraire) VALUES (?, ?);",
-                "UPDATE List_Tache SET nom = ?, taucHorraire = ?",
+                "INSERT INTO Liste_Tache (nom, taux_horraire) VALUES (?, ?);",
+                "UPDATE Liste_Tache SET nom = ?, taux_horraire = ? WHERE id = ?;",
+                3,
                 entite)
         { requete ->
             requete.setString(1, entite.nom)
-            requete.setFloat(2, entite.taucHorraire)
+            requete.setFloat(2, entite.taux)
         }
     }
 
@@ -61,38 +62,5 @@ class TacheDAO(serviceBD: ServiceBD) : DAOAbstraite<Tache>(serviceBD) {
 
     override fun supprimer(id: Int): Boolean {
         return false;
-    }
-
-    fun insererTableTacheDossier(idDossier: Int, idTache: Int) {
-        val connexion = serviceBD.ouvrirConnexion()
-
-        val requete: PreparedStatement = try {
-            connexion.prepareStatement(
-                "INSERT INTO Tache_Dossier (id_dossier, id_tache) VALUES (?, ?);",
-                Statement.RETURN_GENERATED_KEYS
-            )
-        } catch (e: SQLException) {
-            Logger.getLogger(TacheDAO::class.java.name).severe("Erreur requete: ${e.message}")
-            throw e
-        }
-
-        requete.setInt(1, idDossier)
-        requete.setInt(2, idTache)
-
-        requete.executeUpdate()
-
-        serviceBD.fermerConnexion()
-    }
-
-    fun trouverdernierinseree(): Int {
-        val connexion = serviceBD.ouvrirConnexion()
-        val requete: PreparedStatement =
-            connexion.prepareStatement("SELECT id FROM List_Tache ORDER BY id DESC LIMIT 1")
-        val resultats: ResultSet = requete.executeQuery()
-
-        val id: Int = resultats.getInt("id");
-
-        serviceBD.fermerConnexion()
-        return id
     }
 }

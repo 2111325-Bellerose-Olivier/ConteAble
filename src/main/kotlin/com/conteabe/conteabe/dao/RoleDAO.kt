@@ -21,6 +21,7 @@ class RoleDAO(serviceBD: ServiceBD) : DAOAbstraite<Role>(serviceBD) {
         enregistrerEntite(
                 "INSERT INTO Role (nom) VALUES (?);",
                 "UPDATE Role SET nom = ? WHERE id = ?;",
+                2,
                 entite)
         { requete ->
             requete.setString(1, entite.nom)
@@ -65,5 +66,4 @@ class RoleDAO(serviceBD: ServiceBD) : DAOAbstraite<Role>(serviceBD) {
     override fun supprimer(id: Int): Boolean? {
         return false;
     }
-
 }
