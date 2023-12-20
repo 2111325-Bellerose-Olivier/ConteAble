@@ -49,5 +49,9 @@ enum class Page(val view: String, val constructor: KFunction<*>) {
     AjoutHeures(
         "ajout-heure.fxml",
         AjoutHeure::class.primaryConstructor!!
+    ),
+    Client(
+    "client-view.fxml",
+    ClientController::class.primaryConstructor!!
     )
 }

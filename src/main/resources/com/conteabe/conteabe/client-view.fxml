@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.HBox?>
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx" stylesheets="@erreur-field.css">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <ImageView>
+        <Image url="@Logo.jpg"/>
+    </ImageView>
+
+    <Label style="-fx-font-size: 20;" text="Clients"/>
+
+    <TableView fx:id="listeClients">
+        <columns>
+            <TableColumn prefWidth="75.0" text="Prénom" fx:id="prenomsClient" editable="false"/>
+            <TableColumn prefWidth="75.0" text="Nom" fx:id="nomsClient" editable="false"/>
+            <TableColumn prefWidth="150.0" text="Courriel" fx:id="courrielsClient" editable="false"/>
+            <TableColumn prefWidth="100.0" text="Numéro de Téléphone" fx:id="numeroTelephoneClients" editable="false"/>
+            <TableColumn prefWidth="100.0" text="Adresse Civil" fx:id="adresseClients" editable="false"/>
+            <TableColumn prefWidth="100.0" text="Code Postal" fx:id="codePostalClients" editable="false"/>
+            <TableColumn prefWidth="100.0" text="Ville" fx:id="villeClients" editable="false"/>
+            <TableColumn prefWidth="100.0" text="Province" fx:id="provinceClients" editable="false"/>
+            <TableColumn prefWidth="100.0" text="Pays" fx:id="paysClients" editable="false"/>
+        </columns>
+    </TableView>
+
+    <HBox alignment="CENTER" spacing="50.0">
+        <Button text="Ajouter"/>
+        <Button text="Modifier" />
+        <Button text="Supprimer" onMouseClicked="#SupprimerBoutton"/>
+    </HBox>
+
+    <Label fx:id="messageErreur" style="-fx-text-fill: red" visible="false">Aucun client n'est selectionée</Label>
+</VBox>
