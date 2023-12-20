@@ -81,7 +81,7 @@ class AjouterClientController(private val contexte: Contexte) {
             prenom = prenom.text,
             courriel = courriel.text,
             numero_telephone = numero_telephone.text,
-            idClient = null
+            id = null
         )
         try {
             ClientDAO(contexte.services.getService<ServiceBD>() as ServiceBD).enregistrer(newClient)

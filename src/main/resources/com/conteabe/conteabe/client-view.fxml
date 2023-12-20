@@ -38,6 +38,9 @@
     <HBox alignment="CENTER" spacing="50.0">
         <Button text="Ajouter" onMouseClicked="#AjouterBoutton"/>
         <Button text="Modifier" />
-        <Button text="Supprimer" />
+        <Button text="Supprimer" onMouseClicked="#SupprimerBoutton"/>
     </HBox>
+
+    <Label fx:id="messageErreur" style="-fx-text-fill: red" visible="false">Aucun client n'est selectionée</Label>
 </VBox>
+

@@ -122,9 +122,9 @@ class DosserAjouterController(private val contexte: Contexte) {
 
             if (!erreurForm.value && clientField.value != null) {
                 val dossier = Dossier(
-                    id = null,
-                    nom = dossierField.text,
-                    id_client = clientField.value.id!!
+                    null,
+                    clientField.value,
+                    dossierField.text
                 )
 
                 DossierDAO(contexte.services.getService<ServiceBD>() as ServiceBD).enregistrer(dossier)

@@ -6,8 +6,7 @@ import com.conteabe.conteabe.service.ServiceBD
 import javafx.collections.FXCollections
 import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
-import javafx.scene.control.TableColumn
-import javafx.scene.control.TableView
+import javafx.scene.control.*
 import javafx.scene.control.cell.PropertyValueFactory
 import java.util.function.Predicate
 
@@ -43,8 +42,11 @@ class ClientController(private val contexte: Contexte) {
     @FXML
     private lateinit var paysClients: TableColumn<Client, String>
 
+    @FXML
+    private lateinit var messageErreur: Label
 
     private lateinit var clients: FilteredList<Client>
+
 
     fun initialize() {
         clients = FilteredList<Client>(
@@ -55,7 +57,6 @@ class ClientController(private val contexte: Contexte) {
             )
         )
 
-        // Définition des colonnes de la table
         nomsClient.cellValueFactory = PropertyValueFactory("nom")
         prenomsClient.cellValueFactory = PropertyValueFactory("prenom")
         courrielsClient.cellValueFactory = PropertyValueFactory("courriel")
@@ -71,9 +72,36 @@ class ClientController(private val contexte: Contexte) {
         listeClients.items = clients
     }
 
+
+    private fun creerDialogue(): Boolean {
+        val confirmationDialog = Alert(Alert.AlertType.CONFIRMATION)
+        confirmationDialog.title = "Confirmation Suppression"
+        confirmationDialog.headerText = "Voulez-vous vraiment supprimer le client?"
+
+        val result = confirmationDialog.showAndWait()
+
+        return result.get() == ButtonType.OK
+    }
+
     @FXML
-    private fun AjouterBoutton() {
-        contexte.SetPage(Page.AjouterClient)
+    private fun SupprimerBoutton() {
+        val selectedClient: Client? = listeClients.selectionModel.selectedItem
+
+        if (!messageErreur.isVisible || selectedClient == null) {
+            messageErreur.isVisible = true
+            return
+        }
+
+        if (!creerDialogue()) {
+            return
+        }
+
+        messageErreur.isVisible = false
+
+        ClientDAO(contexte.services.getService<ServiceBD>() as ServiceBD).supprimer(selectedClient.id!!);
+
+        initialize()
     }
 
 }
+

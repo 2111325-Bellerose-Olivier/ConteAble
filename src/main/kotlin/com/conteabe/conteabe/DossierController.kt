@@ -9,11 +9,7 @@ import javafx.scene.control.TableColumn
 import javafx.scene.control.TableView
 import javafx.scene.control.cell.PropertyValueFactory
 
-class ListeDossier(id: Int?, id_client: Int?, nom_client: String, nom_dossier: String) {
-    var id = id
-    var id_client = id_client
-    var nom_client = nom_client
-    var nom_dossier = nom_dossier
+class ListeDossier(var id: Int?, var id_client: Int?, var nom_client: String, var nom_dossier: String) {
 }
 
 class DossierController(private val contexte: Contexte) {

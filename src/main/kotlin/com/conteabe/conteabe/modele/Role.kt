@@ -1,6 +1,7 @@
 package com.conteabe.conteabe.modele;
 
 import com.conteabe.conteabe.dao.Entite
+import java.util.*
 
 /**
  * Utilisateur du système.
@@ -15,8 +16,17 @@ class Role(
     var nom: String
 ) :
     Entite(id) {
+
+    public fun estSuperviseur(): Boolean {
+        return nom == "Superviseur"
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(id, nom)
+    }
+
     override fun equals(other: Any?): Boolean {
-        return other is Employe && equals(other)
+        return other is Role && equals(other)
     }
 
     fun equals(other: Role): Boolean {
