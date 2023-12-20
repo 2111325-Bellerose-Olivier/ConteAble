@@ -55,7 +55,7 @@ class DossierDAO(serviceBD: ServiceBD) : DAOAbstraite<Dossier>(serviceBD) {
     override fun chargerParId(id: Int): Dossier? {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement =
-            connexion.prepareStatement("SELECT d.id_client, c.adresse_civil, c.code_postal, c.ville, c.province, c.pays, c.nom as nom_client, c.prenom, c.courriel, c.numero_telephone, d.nom FROM Dossier d INNER JOIN Client c ON c.id = d.id_client where d.id = ?")
+            connexion.prepareStatement("SELECT d.id_client, c.adresse_civil, c.code_postal, c.ville, c.province, c.pays, c.nom as nom_client, c.prenom, c.courriel, c.numero_telephone, d.nom FROM Dossier d INNER JOIN Client c ON c.id = d.id_client where id = ?")
         requete.setInt(1, id)
         val resultats: ResultSet = requete.executeQuery()
 
