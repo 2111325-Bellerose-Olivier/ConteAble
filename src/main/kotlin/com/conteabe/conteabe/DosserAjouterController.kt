@@ -62,12 +62,8 @@ class DosserAjouterController(private val contexte: Contexte) {
         return clients
     }
 
-    private fun trouverNomClient(client: Client) : String {
-        return when {
-            client is ClientCompagnie -> client.nom_compagnie
-            client is ClientIndividu -> "${client.prenom} ${client.nom}"
-            else -> "Client Inconnu"
-        }
+    private fun trouverNomClient(client: Client): String {
+        return "${client.prenom} ${client.nom}"
     }
 
     private fun fillComboBox() {
