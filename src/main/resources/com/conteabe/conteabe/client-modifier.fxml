@@ -16,7 +16,7 @@
     <ImageView>
         <Image url="@Logo.jpg"/>
     </ImageView>
-    <Label style="-fx-font-size: 20;" text="Ajouter Client"/>
+    <Label style="-fx-font-size: 20;" text="Modifier Client"/>
     <VBox maxWidth="400" spacing="10">
         <Label fx:id="validation" style="-fx-text-fill: red;"/>
 

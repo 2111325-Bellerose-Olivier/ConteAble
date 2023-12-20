@@ -19,7 +19,7 @@ import javafx.scene.layout.VBox
 * Classe qui charge le ficher FXML ajouter-client.fxml
 * et qui s'ocuppe d'enregistrer le nouveau client
 */
-class ModifierClientController(private val contexte: Contexte) {
+class ModifierClientController(private val contexte: Contexte, private val client: Client) {
 
     @FXML
     private lateinit var adresse_civil: TextField
@@ -55,6 +55,18 @@ class ModifierClientController(private val contexte: Contexte) {
     */
     fun initialize() {
         modifierClient.disableProperty().bind(erreurForm)
+
+        adresse_civil.text = client.adresse_civil
+        code_postal.text = client.code_postal
+        ville.text = client.ville
+        province.text = client.province
+        pays.text = client.pays
+
+        nom.text = client.nom
+        prenom.text = client.prenom
+        courriel.text = client.courriel
+        numero_telephone.text = client.numero_telephone
+
     }
 
     /*
@@ -81,8 +93,11 @@ class ModifierClientController(private val contexte: Contexte) {
             prenom = prenom.text,
             courriel = courriel.text,
             numero_telephone = numero_telephone.text,
-            id = null
+            id = client.id
         )
+
+        messageSucces.isVisible = true
+
         try {
             ClientDAO(contexte.services.getService<ServiceBD>() as ServiceBD).enregistrer(newClient)
             messageSucces.text = "Le client a bien été enregistrer."

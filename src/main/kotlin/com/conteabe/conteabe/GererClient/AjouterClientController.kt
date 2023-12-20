@@ -83,6 +83,9 @@ class AjouterClientController(private val contexte: Contexte) {
             numero_telephone = numero_telephone.text,
             id = null
         )
+
+        messageSucces.isVisible = true
+
         try {
             ClientDAO(contexte.services.getService<ServiceBD>() as ServiceBD).enregistrer(newClient)
             messageSucces.text = "Le client a bien été enregistrer."

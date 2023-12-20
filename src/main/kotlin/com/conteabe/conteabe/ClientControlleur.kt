@@ -84,6 +84,24 @@ class ClientController(private val contexte: Contexte) {
     }
 
     @FXML
+    private fun AjouterBoutton() {
+        contexte.SetPage(Page.AjouterClient)
+    }
+
+    @FXML
+    private fun ModifierBoutton() {
+        val selectedClient: Client? = listeClients.selectionModel.selectedItem
+
+        if (!messageErreur.isVisible || selectedClient == null) {
+            messageErreur.isVisible = true
+            return
+        }
+
+        messageErreur.isVisible = false
+        contexte.SetPage(Page.ModifierClient, selectedClient)
+    }
+
+    @FXML
     private fun SupprimerBoutton() {
         val selectedClient: Client? = listeClients.selectionModel.selectedItem
 

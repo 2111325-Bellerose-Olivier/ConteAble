@@ -37,7 +37,7 @@
 
     <HBox alignment="CENTER" spacing="50.0">
         <Button text="Ajouter" onMouseClicked="#AjouterBoutton"/>
-        <Button text="Modifier" />
+        <Button text="Modifier" onMouseClicked="#ModifierBoutton"/>
         <Button text="Supprimer" onMouseClicked="#SupprimerBoutton"/>
     </HBox>
 
