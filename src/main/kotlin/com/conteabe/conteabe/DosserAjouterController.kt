@@ -1,11 +1,8 @@
 package com.conteabe.conteabe
 
-import com.conteabe.conteabe.dao.ClientCompagnieDAO
-import com.conteabe.conteabe.dao.ClientIndividuDAO
 import com.conteabe.conteabe.dao.DossierDAO
 import com.conteabe.conteabe.modele.Client
 import com.conteabe.conteabe.modele.ClientCompagnie
-import com.conteabe.conteabe.modele.ClientIndividu
 import com.conteabe.conteabe.modele.Dossier
 import com.conteabe.conteabe.service.ServiceBD
 import javafx.beans.property.BooleanProperty

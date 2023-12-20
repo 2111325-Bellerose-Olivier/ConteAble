@@ -1,13 +1,7 @@
 package com.conteabe.conteabe
 
-import com.conteabe.conteabe.dao.ClientCompagnieDAO
-import com.conteabe.conteabe.dao.ClientIndividuDAO
-import com.conteabe.conteabe.dao.DossierDAO
 import com.conteabe.conteabe.modele.ClientCompagnie
-import com.conteabe.conteabe.modele.ClientIndividu
-import com.conteabe.conteabe.modele.Dossier
 import com.conteabe.conteabe.service.ServiceBD
-import javafx.collections.FXCollections
 import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
 import javafx.scene.control.TableColumn

@@ -12,8 +12,8 @@ class ClientDAO() {
     fun enregistrer(connexion: Connection, entite: Client) {
         val estInsertion = entite.id == null
 
-        val insert = "INSERT INTO Client (adresse_civil, code_postal, ville, province, pays) VALUES (?, ?, ?, ?, ?);"
-        val update = "UPDATE Client SET adresse_civil=?, code_postal=?, ville=?, province=?, pays=? WHERE id = ?;"
+        val insert = "INSERT INTO Client (adresse_civil, code_postal, ville, province, pays, nom, prenom, courriel, numero_telephone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);"
+        val update = "UPDATE Client SET adresse_civil=?, code_postal=?, ville=?, province=?, pays=?, nom=?, prenom=?, courriel=?, numero_telephone=? WHERE id = ?;"
         var requete: PreparedStatement
 
         if (estInsertion) {
@@ -28,6 +28,10 @@ class ClientDAO() {
         requete.setString(3, entite.ville)
         requete.setString(4, entite.province)
         requete.setString(5, entite.pays)
+        requete.setString(6, entite.nom)
+        requete.setString(7, entite.prenom)
+        requete.setString(8, entite.courriel)
+        requete.setString(9, entite.numero_telephone)
 
         if (requete.executeUpdate() > 0) {
             val rowId = connexion.prepareStatement("SELECT last_insert_rowid()").executeQuery()
@@ -46,12 +50,16 @@ class ClientDAO() {
         while (resultats.next()) {
             clients.add(
                     Client(
-                            resultats.getInt("id"),
-                            resultats.getString("adresse_civil"),
-                            resultats.getString("code_postal"),
-                            resultats.getString("ville"),
-                            resultats.getString("province"),
-                            resultats.getString("pays"),
+                        resultats.getInt("id"),
+                        resultats.getString("adresse_civil"),
+                        resultats.getString("code_postal"),
+                        resultats.getString("ville"),
+                        resultats.getString("province"),
+                        resultats.getString("pays"),
+                        resultats.getString("nom"),
+                        resultats.getString("prenom"),
+                        resultats.getString("courriel"),
+                        resultats.getString("numero_telephone"),
                     )
             )
         }
@@ -75,6 +83,10 @@ class ClientDAO() {
                     resultats.getString("ville"),
                     resultats.getString("province"),
                     resultats.getString("pays"),
+                    resultats.getString("nom"),
+                    resultats.getString("prenom"),
+                    resultats.getString("courriel"),
+                    resultats.getString("numero_telephone"),
             )
         else null
 
