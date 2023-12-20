@@ -40,7 +40,7 @@ class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
     override fun chargerTout(): MutableList<Employe> {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement =
-                connexion.prepareStatement("SELECT e.id, e.nom, e.prenom, e.mdp, r.id AS role_id, r.nom AS role_name, e.courriel FROM Employe e INNER JOIN Role r ON e.id_role = r.id")
+                connexion.prepareStatement("SELECT e.id, e.nom, e.prenom, e.mdp, r.id AS role_id, r.nom AS role_nom, e.courriel FROM Employe e INNER JOIN Role r ON e.id_role = r.id")
         val resultats: ResultSet = requete.executeQuery()
         val employes: MutableList<Employe> = mutableListOf()
 
@@ -66,12 +66,12 @@ class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
     override fun chargerParId(id: Int): Employe? {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement =
-                connexion.prepareStatement("SELECT e.id, e.nom, e.prenom, e.mdp, r.id AS role_id, r.nom AS role_nom, e.courriel FROM Employe e INNER JOIN Role r ON e.id_role = r.id WHERE e.id = ?")
+                connexion.prepareStatement("SELECT e.nom, e.prenom, e.mdp, r.id AS role_id, r.nom AS role_nom, e.courriel FROM Employe e INNER JOIN Role r ON e.id_role = r.id WHERE e.id = ?")
         requete.setInt(1, id)
         val resultats: ResultSet = requete.executeQuery()
 
         val employe: Employe? = if (resultats.next()) Employe(
-                resultats.getInt("id"),
+                id,
                 resultats.getString("nom"),
                 resultats.getString("prenom"),
                 resultats.getString("mdp"),

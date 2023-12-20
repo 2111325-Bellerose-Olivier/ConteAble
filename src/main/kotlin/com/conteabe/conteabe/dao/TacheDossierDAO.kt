@@ -1,13 +1,10 @@
 package com.conteabe.conteabe.dao
 
-import com.conteabe.conteabe.modele.Dossier
-import com.conteabe.conteabe.modele.Employe
-import com.conteabe.conteabe.modele.SqlTacheDossier
+import com.conteabe.conteabe.modele.*
 import com.conteabe.conteabe.service.ServiceBD
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.Statement
-import com.conteabe.conteabe.modele.TacheDossier
 import java.sql.Time
 
 class TacheDossierDAO(serviceBD: ServiceBD) : DAOAbstraite<TacheDossier>(serviceBD) {
@@ -16,10 +13,11 @@ class TacheDossierDAO(serviceBD: ServiceBD) : DAOAbstraite<TacheDossier>(service
         EmployeDAO(serviceBD).enregistrer(entite.employe)
 
         enregistrerEntite(
-                "INSERT INTO Tache_Dossier (id_dossier, id_employe, nom_tache, duree, montant) VALUES (?, ?, ?, ?, ?);",
-                "UPDATE Tache_Dossier SET id_dossier = ?, id_employe = ?, nom_tache = ?, duree = ?, montant = ? WHERE id = ?",
-                6,
-                entite)
+            "INSERT INTO Tache_Dossier (id_dossier, id_employe, nom_tache, duree, montant) VALUES (?, ?, ?, ?, ?);",
+            "UPDATE Tache_Dossier SET id_dossier = ?, id_employe = ?, nom_tache = ?, duree = ?, montant = ? WHERE id = ?",
+            6,
+            entite
+        )
         { requete ->
             requete.setInt(1, entite.dossier.id!!)
             requete.setInt(2, entite.employe.id!!)
@@ -29,54 +27,66 @@ class TacheDossierDAO(serviceBD: ServiceBD) : DAOAbstraite<TacheDossier>(service
         }
     }
 
+    fun convertRow(resultats: ResultSet): TacheDossier {
+        return TacheDossier(
+            resultats.getInt(1),
+            Dossier(
+                resultats.getInt(7),
+                Client(
+                    resultats.getInt(10),
+                    resultats.getString(11),
+                    resultats.getString(12),
+                    resultats.getString(13),
+                    resultats.getString(14),
+                    resultats.getString(15),
+                    resultats.getString(16),
+                    resultats.getString(17),
+                    resultats.getString(18),
+                    resultats.getString(19),
+                ),
+                resultats.getString(9),
+            ),
+            Employe(
+                resultats.getInt(20),
+                resultats.getString(21),
+                resultats.getString(22),
+                resultats.getString(23),
+                Role(
+                    resultats.getInt(26),
+                    resultats.getString(27)
+                ),
+                resultats.getString(25)
+            ),
+            resultats.getString(4),
+            resultats.getTime(5),
+            resultats.getFloat(6)
+        )
+    }
 
     override fun chargerTout(): MutableList<TacheDossier> {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement =
-                connexion.prepareStatement("SELECT id, id_dossier, id_employe, nom_tache, duree, montant FROM Tache_Dossier")
+            connexion.prepareStatement("SELECT * FROM Tache_Dossier t INNER JOIN Dossier d ON d.id = t.id_dossier INNER JOIN Client c ON c.id = d.id_client INNER JOIN Employe e ON e.id = t.id_employe INNER JOIN Role r ON r.id = e.id_role")
         val resultats: ResultSet = requete.executeQuery()
-        val taches: MutableList<SqlTacheDossier> = mutableListOf()
+        val taches: MutableList<TacheDossier> = mutableListOf()
 
         while (resultats.next()) {
             taches.add(
-                    SqlTacheDossier(
-                            resultats.getInt("id"),
-                            resultats.getInt("id_dossier"),
-                            resultats.getInt("id_employe"),
-                            resultats.getString("nom_tache"),
-                            resultats.getTime("duree"),
-                            resultats.getFloat("montant")
-                    )
+                convertRow(resultats)
             )
         }
         serviceBD.fermerConnexion()
-        return taches.map { tache ->
-            TacheDossier(
-                    tache.id,
-                    DossierDAO(serviceBD).chargerParId(tache.dossier)!!,
-                    EmployeDAO(serviceBD).chargerParId(tache.employe)!!,
-                    tache.nom_tache,
-                    tache.duree,
-                    tache.montant
-            )
-        }.toMutableList()
+        return taches
     }
 
     override fun chargerParId(id: Int): TacheDossier? {
         val connexion = serviceBD.ouvrirConnexion()
         val requete: PreparedStatement =
-                connexion.prepareStatement("SELECT id, id_dossier, id_employe, nom_tache, duree, montant FROM Tache_Dossier where id = ?")
+            connexion.prepareStatement("SELECT * FROM Tache_Dossier t INNER JOIN Dossier d ON d.id = t.id_dossier INNER JOIN Client c ON c.id = d.id_client INNER JOIN Employe e ON e.id = t.id_employe INNER JOIN Role r ON r.id = e.id_role where t.id = ?")
         requete.setInt(1, id)
         val resultats: ResultSet = requete.executeQuery()
 
-        val tache: TacheDossier? = if (resultats.next()) TacheDossier(
-                resultats.getInt("id"),
-                DossierDAO(serviceBD).chargerParId(resultats.getInt("id_dossier"))!!,
-                EmployeDAO(serviceBD).chargerParId(resultats.getInt("id_employe"))!!,
-                resultats.getString("nom_tache"),
-                resultats.getTime("duree"),
-                resultats.getFloat("montant")
-        ) else null
+        val tache: TacheDossier? = if (resultats.next()) convertRow(resultats) else null
         serviceBD.fermerConnexion()
         return tache
     }
