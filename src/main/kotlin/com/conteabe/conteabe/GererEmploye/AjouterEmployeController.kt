@@ -49,7 +49,6 @@ class AjouterEmployeController(private val contexte: Contexte) {
                 contexte.services.getService<ServiceBD>() as ServiceBD
             ).chargerTout()
         )
-        //FAIRE ÇA CAR NE MARCHE PAS
     }
 
     @FXML

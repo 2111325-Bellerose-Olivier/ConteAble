@@ -9,8 +9,8 @@ import javafx.stage.Stage
 class MainApplication : Application() {
     override fun start(stage: Stage) {
 
-        val chargeur = FXMLLoader(MainApplication::class.java.getResource(Page.SupprimerEmploye.view))
-        chargeur.setController(Page.SupprimerEmploye.constructor.call(Contexte(stage)))
+        val chargeur = FXMLLoader(MainApplication::class.java.getResource(Page.ModifierEmploye.view))
+        chargeur.setController(Page.ModifierEmploye.constructor.call(Contexte(stage)))
         val parent : Parent = chargeur.load()
 
 
