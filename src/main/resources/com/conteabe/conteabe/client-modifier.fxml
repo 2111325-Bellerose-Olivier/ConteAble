@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx" stylesheets="@erreur-field.css">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+    <Button text="Retour" onMouseClicked="#RetourClient"/>
+    <ImageView>
+        <Image url="@Logo.jpg"/>
+    </ImageView>
+    <Label style="-fx-font-size: 20;" text="Ajouter Client"/>
+    <VBox maxWidth="400" spacing="10">
+        <Label fx:id="validation" style="-fx-text-fill: red;"/>
+
+        <VBox>
+            <TextField fx:id="adresse_civil" promptText="Adresse Civil" onKeyReleased="#onChangeTextField"/>
+            <Label fx:id="adresseErreur" style="-fx-text-fill: red;" visible="false" managed="false" />
+        </VBox>
+
+        <VBox>
+            <TextField fx:id="code_postal" promptText="Code Postal"  onKeyReleased="#onChangeCodePostalField"/>
+            <Label fx:id="codePostalErreur" style="-fx-text-fill: red;" visible="false" managed="false" />
+        </VBox>
+
+        <VBox>
+            <TextField fx:id="ville" promptText="Ville" onKeyReleased="#onChangeTextField" />
+            <Label fx:id="villeErreur" style="-fx-text-fill: red;" visible="false" managed="false" />
+        </VBox>
+
+        <VBox>
+            <TextField fx:id="province" promptText="Province" onKeyReleased="#onChangeTextField"/>
+            <Label fx:id="provinceErreur" style="-fx-text-fill: red;" visible="false" managed="false" />
+        </VBox>
+
+        <VBox>
+            <TextField fx:id="pays" promptText="Pays" onKeyReleased="#onChangeTextField"/>
+            <Label fx:id="paysErreur" style="-fx-text-fill: red;" visible="false" managed="false" />
+        </VBox>
+
+        <VBox>
+            <TextField fx:id="nom" promptText="Nom" onKeyReleased="#onChangeTextField"/>
+            <Label fx:id="nomErreur" style="-fx-text-fill: red;" visible="false" managed="false" />
+        </VBox>
+
+        <VBox>
+            <TextField fx:id="prenom" promptText="Prénom" onKeyReleased="#onChangeTextField"/>
+            <Label fx:id="prenomErreur" style="-fx-text-fill: red;" visible="false" managed="false" />
+        </VBox>
+
+        <VBox>
+            <TextField fx:id="courriel" promptText="Courriel" onKeyReleased="#onChangeCourrielField"/>
+            <Label fx:id="courrielErreur" style="-fx-text-fill: red;" visible="false" managed="false" />
+        </VBox>
+
+        <VBox>
+            <TextField fx:id="numero_telephone" promptText="Numéro de Téléphone" onKeyReleased="#onChangeTelephoneField"/>
+            <Label fx:id="telephoneErreur" style="-fx-text-fill: red;" visible="false" managed="false" />
+        </VBox>
+
+    </VBox>
+    <VBox alignment="CENTER_RIGHT">
+        <Button fx:id="modifierClient" disable="${controller.erreurForm}" onMouseClicked="#Enregistrer">Enregistrer</Button>
+        <Label fx:id="messageSucces" visible="false" />
+    </VBox>
+</VBox>

@@ -1,6 +1,7 @@
 package com.conteabe.conteabe
 
 import com.conteabe.conteabe.GererClient.AjouterClientController
+import com.conteabe.conteabe.GererClient.ModifierClientController
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.primaryConstructor
 
@@ -57,5 +58,9 @@ enum class Page(val view: String, val constructor: KFunction<*>) {
     AjouterClient(
     "client-ajouter.fxml",
     AjouterClientController::class.primaryConstructor!!
-    )
+    ),
+    ModifierClient(
+        "client-modifier.fxml",
+        ModifierClientController::class.primaryConstructor!!
+    ),
 }
