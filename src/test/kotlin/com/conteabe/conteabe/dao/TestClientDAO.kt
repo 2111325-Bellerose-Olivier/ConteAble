@@ -81,6 +81,5 @@ class TestClientDAO {
         if (other != null) {
             Assertions.fail<TestClientDAO>()
         }
-
     }
 }
