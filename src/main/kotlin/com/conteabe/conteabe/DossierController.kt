@@ -78,4 +78,8 @@ class DossierController(private val contexte: Contexte) {
         contexte.SetPage(Page.ModifierDossier, currentDossier)
     }
 
+    @FXML
+    private fun RetourDossier() {
+        contexte.SetPage(Page.Tache)
+    }
 }

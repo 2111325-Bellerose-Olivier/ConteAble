@@ -121,5 +121,10 @@ class ClientController(private val contexte: Contexte) {
         initialize()
     }
 
+    @FXML
+    private fun RetourClient() {
+        contexte.SetPage(Page.Tache)
+    }
+
 }
 

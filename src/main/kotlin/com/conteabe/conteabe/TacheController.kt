@@ -2,8 +2,6 @@ package com.conteabe.conteabe
 
 import com.conteabe.conteabe.dao.DossierDAO
 import com.conteabe.conteabe.dao.TacheDAO
-import com.conteabe.conteabe.modele.Client
-import com.conteabe.conteabe.modele.Dossier
 import com.conteabe.conteabe.modele.Employe
 import com.conteabe.conteabe.modele.Tache
 import com.conteabe.conteabe.service.ServiceBD
@@ -128,13 +126,18 @@ class TacheController(private val contexte: Contexte) {
     }
 
     @FXML
-    private fun ajoutDossier(){
-        contexte.SetPage(Page.AjouterDossier)
+    private fun pageDossier(){
+        contexte.SetPage(Page.Dossier)
     }
 
     @FXML
     private fun ajoutTemps(){
         contexte.SetPage(Page.AjoutHeures)
+    }
+
+    @FXML
+    private fun  pageClient() {
+        contexte.SetPage(Page.Client)
     }
 
     @FXML

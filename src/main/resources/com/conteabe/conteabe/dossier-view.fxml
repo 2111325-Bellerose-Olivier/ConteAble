@@ -14,6 +14,9 @@
 <?import javafx.scene.control.DialogPane?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx">
 
+    <Button text="Retour" onMouseClicked="#RetourDossier"/>
+
+
     <ImageView>
         <Image url="@Logo.jpg"/>
     </ImageView>

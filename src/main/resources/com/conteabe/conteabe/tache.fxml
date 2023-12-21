@@ -69,10 +69,10 @@
 
             <Label fx:id="Modifier"/>
             <Button text="Modifier" onAction="#modifier"/>
-
-            <Button text="Ajout dossier" onAction="#ajoutDossier"/>
+            <Button text="Page Dossiers" onAction="#pageDossier"/>
             <Button text="Ajout temps" onAction="#ajoutTemps"/>
             <Button text="Rapport temps" onAction="#rapportTemps"/>
+            <Button text="Page Clients" onAction="#pageClient" />
         </VBox>
     </HBox>
 </VBox>
