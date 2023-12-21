@@ -32,9 +32,9 @@
     </TableView>
 
     <HBox alignment="CENTER" spacing="50.0">
-        <Button text="Ajouter" onMouseClicked="#ChangerPage"/>
-        <Button text="Modifier" />
+        <Button text="Ajouter" onMouseClicked="#AjouterBoutton"/>
+        <Button text="Modifier" onMouseClicked="#ModifierBoutton"/>
     </HBox>
 
-    <Label fx:id="messageErreur" style="-fx-text-fill: red" visible="false">Aucun client n'est selectionée</Label>
+    <Label fx:id="messageErreur" style="-fx-text-fill: red" visible="false">Aucun dossier n'est selectionée</Label>
 </VBox>
