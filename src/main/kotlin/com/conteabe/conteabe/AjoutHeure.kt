@@ -1,4 +1,5 @@
 import com.conteabe.conteabe.Contexte
+import com.conteabe.conteabe.Page
 import com.conteabe.conteabe.dao.DossierDAO
 import com.conteabe.conteabe.dao.EmployeDAO
 import com.conteabe.conteabe.dao.TacheDAO
@@ -16,8 +17,11 @@ import javafx.fxml.FXML
 import javafx.scene.control.*
 import javafx.scene.control.cell.PropertyValueFactory
 import java.sql.Time
-import java.time.LocalTime
+import java.sql.Timestamp
 import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalTime
+import java.util.Date
 import java.util.function.Predicate
 
 class AjoutHeure(private val contexte: Contexte) {
@@ -50,6 +54,9 @@ class AjoutHeure(private val contexte: Contexte) {
     private lateinit var dossiers: FilteredList<Triple<Int, String, Int>>
 
     @FXML
+    private lateinit var dateDebut: DatePicker
+
+    @FXML
     private lateinit var heureDebutHourSpinner: Spinner<Int>
 
     @FXML
@@ -62,19 +69,12 @@ class AjoutHeure(private val contexte: Contexte) {
     private lateinit var heureFinMinuteSpinner: Spinner<Int>
 
     @FXML
-    private lateinit var idDossierAjout: IntegerField
-
-    @FXML
-    private lateinit var nomTacheAjout: TextField
-
-    @FXML
-    private lateinit var montantAjouter: DoubleField
-
-    @FXML
-    private val Ajouter: Button? = null
+    private lateinit var Ajouter: Button
 
     @FXML
     fun initialize() {
+        dateDebut.value = LocalDate.now()
+
         taches = FilteredList<Tache>(
             FXCollections.observableList(
                 TacheDAO(
@@ -108,6 +108,16 @@ class AjoutHeure(private val contexte: Contexte) {
 
         listeTaches.items = taches
         listeDossier.items = dossiers
+
+        listeDossier.selectionModel.selectedItemProperty().addListener { _, _, _ -> updateAjoutEnable() }
+        listeTaches.selectionModel.selectedItemProperty().addListener { _, _, _ -> updateAjoutEnable() }
+
+        updateAjoutEnable()
+    }
+
+    private fun updateAjoutEnable() {
+        Ajouter.isDisable = listeDossier.selectionModel.selectedItems.isEmpty() ||
+                listeTaches.selectionModel.selectedItems.isEmpty()
     }
 
     @FXML
@@ -116,9 +126,8 @@ class AjoutHeure(private val contexte: Contexte) {
         val heureDebutMinute = heureDebutMinuteSpinner.value
         val HeureFinHour = heureFinHourSpinner.value
         val HeureFinMinute = heureFinMinuteSpinner.value
-        val idDossier = idDossierAjout.value
-        val nomTache = nomTacheAjout.text
-        val montant = montantAjouter.value.toFloat();
+        val idDossier = listeDossier.selectionModel.selectedItem.first
+        val tache = listeTaches.selectionModel.selectedItem
 
         val heureDebut = LocalTime.of(heureDebutHour, heureDebutMinute)
         val heureFin = LocalTime.of(HeureFinHour, HeureFinMinute)
@@ -138,20 +147,33 @@ class AjoutHeure(private val contexte: Contexte) {
         val dossierDAO = DossierDAO(contexte.services.getService<ServiceBD>() as ServiceBD)
         val employeDAO = EmployeDAO(contexte.services.getService<ServiceBD>() as ServiceBD)
 
-        val dossier: Dossier? = dossierDAO.chargerParId(idDossier);
+        val dossier: Dossier = dossierDAO.chargerParId(idDossier)!!;
         val employeId = contexte.employeConnecte?.id
 
-        if (dossier != null && employeId != null) {
-            val employe = employeDAO.chargerParId(employeId)
-
-            if (employe != null) {
-                val tacheDossier = TacheDossier(id = null, dossier = dossier, employe = employe, nom_tache = nomTache, duree = time, montant = montant)
-                tacheDossierDAO.enregistrer(tacheDossier)
-            } else {
-                println("Employe is null.")
-            }
-        } else {
-            println("Dossier or employeId is null.")
+        if (employeId == null) {
+            println("employeId is null.")
+            return
         }
+
+        val employe = employeDAO.chargerParId(employeId)
+
+        if (employe == null) {
+            println("Employe is null.")
+            return
+        }
+
+        val tacheDossier = TacheDossier(
+            null, dossier, employe, tache.nom, Timestamp.valueOf(
+                heureDebut.atDate(
+                    dateDebut.value
+                )
+            ), time, totalSeconds.toFloat() / 3600f * tache.taux
+        )
+        tacheDossierDAO.enregistrer(tacheDossier)
+    }
+
+    @FXML
+    private fun retour() {
+        contexte.SetPage(Page.Tache)
     }
 }

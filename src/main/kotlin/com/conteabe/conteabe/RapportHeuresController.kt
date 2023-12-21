@@ -14,6 +14,7 @@ import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
 import javafx.scene.control.*
 import javafx.scene.control.cell.CheckBoxListCell
+import java.sql.Date
 import java.sql.Time
 import java.time.LocalDate
 import java.util.function.Predicate
@@ -96,20 +97,20 @@ class RapportHeuresController(private val contexte: Contexte) {
 
     private fun initializeEmployees() {
         employeesList = FilteredList<Employee>(
-                FXCollections.observableList(
-                        EmployeDAO(
-                                contexte.services.getService<ServiceBD>() as ServiceBD
-                        ).chargerTout().map { employe -> Employee(this, employe) }
-                )
+            FXCollections.observableList(
+                EmployeDAO(
+                    contexte.services.getService<ServiceBD>() as ServiceBD
+                ).chargerTout().map { employe -> Employee(this, employe) }
+            )
         )
 
         val filteredEmployee = FilteredList(employeesList)
 
         filteredEmployee.predicateProperty().bind(
-                Bindings.createObjectBinding(
-                        { predicatFiltreEmploye(filtreIdEmployee.text) },
-                        filtreIdEmployee.textProperty()
-                )
+            Bindings.createObjectBinding(
+                { predicatFiltreEmploye(filtreIdEmployee.text) },
+                filtreIdEmployee.textProperty()
+            )
         )
 
         employees.cellFactory = CheckBoxListCell.forListView()
@@ -147,7 +148,17 @@ class RapportHeuresController(private val contexte: Contexte) {
     @FXML
     private fun generate() {
         val employe: Employe = employeSelectionne() ?: return
-        contexte.PrintScreen(Page.__PrintHeuresEmploye, employe)
+        contexte.PrintScreen(
+            Page.__PrintHeuresEmploye,
+            employe,
+            Date.valueOf(dateDebut.value),
+            Date.valueOf(dateFin.value)
+        )
+    }
+
+    @FXML
+    private fun retour() {
+        contexte.SetPage(Page.Tache)
     }
 }
 
