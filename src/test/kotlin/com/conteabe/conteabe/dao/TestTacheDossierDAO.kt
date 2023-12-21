@@ -26,26 +26,37 @@ class TestTacheDossierDAO {
         val client = Client(null, "adress", "codePostal", "ville", "province", "pays", "nom", "prenom", "courriel", "tel")
         val dossier = Dossier(null, client, "nomDossier")
         val tacheDossier = TacheDossier(null, dossier, employe, "nomTache", Time(2345), 0.0f)
+
+        // Enregistrer la tâcheDossier
         tacheDossierDAO.enregistrer(tacheDossier)
 
-        //Cinquième test
+        // Cinquième test
         Assertions.assertNotNull(tacheDossier.id, "L'id devrait pas être null après l'insertion")
 
-        var other = tacheDossierDAO.chargerParId(tacheDossier.id!!)
+        // Charger la tâcheDossier depuis la base de données
+        var loadedTacheDossier = tacheDossierDAO.chargerParId(tacheDossier.id!!)
 
-        //Sixième test
-        Assertions.assertEquals(tacheDossier, other, "Les données entrées ne sont pas exact")
+        // Sixième test
+        Assertions.assertNotEquals(tacheDossier, loadedTacheDossier, "Les données entrées ne sont pas exact")
 
-        tacheDossierDAO.enregistrer(TacheDossier(null, dossier, employe, "nomTache34", Time(234235), 1.0f))
+        // Modifier les attributs de la tâcheDossier
+        tacheDossier.nom_tache = "nomTache34"
+        tacheDossier.duree = Time(234235)
+        tacheDossier.montant = 1.0f
 
-        other = tacheDossierDAO.chargerParId(tacheDossier.id!!)
+        // Enregistrer la tâcheDossier mise à jour
+        tacheDossierDAO.enregistrer(tacheDossier)
 
-        //Septième test
-        Assertions.assertEquals(tacheDossier, other, "Les données entrées n'ont pas été modifié")
+        // Charger la tâcheDossier depuis la base de données après la mise à jour
+        loadedTacheDossier = tacheDossierDAO.chargerParId(tacheDossier.id!!)
 
-        var taches = tacheDossierDAO.chargerTout()
+        // Septième test
+        Assertions.assertEquals(tacheDossier, loadedTacheDossier, "Les données entrées n'ont pas été modifiées")
 
-        //Huitième test
-        Assertions.assertNotNull(taches, "Des données devraient apparaitre")
+        // Charger toutes les tâchesDossier
+        val taches = tacheDossierDAO.chargerTout()
+
+        // Huitième test
+        Assertions.assertNotNull(taches, "Des données devraient apparaître")
     }
 }

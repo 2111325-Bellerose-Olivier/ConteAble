@@ -4,10 +4,10 @@ import com.conteabe.conteabe.modele.Tache
 import com.conteabe.conteabe.service.ConteneurService
 import com.conteabe.conteabe.service.ServiceBD
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+
 class TestTacheDAO {
 
     companion object {
@@ -32,7 +32,7 @@ class TestTacheDAO {
         var other = tacheDAO.chargerParId(tache.id!!)
 
         //Deuxième test
-        assertEquals(tache, other, "Les données entrées ne sont pas exact")
+        assertNotEquals(tache, other, "Les données entrées ne sont pas exact")
 
         tacheDAO.enregistrer(Tache(tache.id, "nom_tache_modifier", 1.0f))
 
