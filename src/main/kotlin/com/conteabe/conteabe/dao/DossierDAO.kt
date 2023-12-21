@@ -15,8 +15,8 @@ class DossierDAO(serviceBD: ServiceBD) : DAOAbstraite<Dossier>(serviceBD) {
             3,
             entite
         ) { requete ->
-            requete.setString(1, entite.nom)
-            requete.setInt(2, entite.client.id!!)
+            requete.setInt(1, entite.client.id!!)
+            requete.setString(2, entite.nom)
         }
     }
 
