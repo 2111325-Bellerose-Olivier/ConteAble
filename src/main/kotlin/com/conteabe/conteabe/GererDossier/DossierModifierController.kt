@@ -1,5 +1,7 @@
-package com.conteabe.conteabe
+package com.conteabe.conteabe.GererDossier
 
+import com.conteabe.conteabe.Contexte
+import com.conteabe.conteabe.Page
 import com.conteabe.conteabe.dao.ClientDAO
 import com.conteabe.conteabe.dao.DossierDAO
 import com.conteabe.conteabe.modele.Client
@@ -14,7 +16,7 @@ import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import javafx.util.StringConverter
 
-class DosserAjouterController(private val contexte: Contexte) {
+class DossierModifierController(private val contexte: Contexte, private val dossier: Dossier) {
     @FXML
     private lateinit var clientField: ComboBox<Client>
 
@@ -37,6 +39,7 @@ class DosserAjouterController(private val contexte: Contexte) {
 
     fun initialize() {
         fillComboBox()
+        dossierField.text = dossier.nom
         bouttonEnregister.disableProperty().bind(erreurForm)
     }
 
@@ -98,15 +101,13 @@ class DosserAjouterController(private val contexte: Contexte) {
     }
 
     @FXML
-    private fun retourBouttonClicked() {
-        contexte.SetPage(Page.Tache)
+    private fun RetourBoutton() {
+        contexte.SetPage(Page.Dossier)
     }
 
     @FXML
     private fun nomDossierOnChange() {
         verifierNomDossier(dossierField.text)
-
-        println(dossierField.text)
 
         if (erreurForm.value && !dossierField.styleClass.contains("error-text-field")) {
             dossierField.styleClass.add("error-text-field")
@@ -122,7 +123,7 @@ class DosserAjouterController(private val contexte: Contexte) {
 
             if (!erreurForm.value && clientField.value != null) {
                 val dossier = Dossier(
-                    null,
+                    dossier.id,
                     clientField.value,
                     dossierField.text
                 )
@@ -133,7 +134,6 @@ class DosserAjouterController(private val contexte: Contexte) {
             messageSucces.text = "Le dossier à bien été enregistrer."
         } catch (error: Exception) {
             messageSucces.text = "Une erreur est survenue lors de l'enregistrement"
-            println(error)
         }
     }
 }

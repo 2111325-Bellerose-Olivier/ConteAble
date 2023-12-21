@@ -4,6 +4,8 @@ package com.conteabe.conteabe
 import AjoutHeure
 import com.conteabe.conteabe.GererClient.AjouterClientController
 import com.conteabe.conteabe.GererClient.ModifierClientController
+import com.conteabe.conteabe.GererDossier.DosserAjouterController
+import com.conteabe.conteabe.GererDossier.DossierModifierController
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.primaryConstructor
 
@@ -48,6 +50,10 @@ enum class Page(val view: String, val constructor: KFunction<*>) {
     AjouterDossier(
         "dossier-ajouter.fxml",
         DosserAjouterController::class.primaryConstructor!!
+    ),
+    ModifierDossier(
+        "dossier-ajouter.fxml",
+        DossierModifierController::class.primaryConstructor!!
     ),
     AjoutHeures(
         "ajout-heure.fxml",
