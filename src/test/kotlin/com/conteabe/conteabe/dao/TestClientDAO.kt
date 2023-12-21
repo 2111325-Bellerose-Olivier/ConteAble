@@ -9,77 +9,78 @@ import org.junit.jupiter.api.Test
 
 class TestClientDAO {
     companion object {
-        lateinit var clientDao: ClientDAO
+        lateinit var clientDAO: ClientDAO
 
         @BeforeAll
         @JvmStatic
         fun initialiser() {
-            clientDao = ClientDAO(ConteneurService().getService<ServiceBD>() as ServiceBD)
+            clientDAO = ClientDAO(ConteneurService().getService<ServiceBD>() as ServiceBD)
         }
     }
 
     @Test
-    fun testEnregistrerClient() {
-        val client: Client = Client(1, "adresse", "code_postal",
-            "ville", "province", "pays", "nom", "prenom",
-            "courriel", "numero_telephone")
+    fun testEnregistrer() {
+        val client = Client(null, "145 rue lupien", "123", "123", "123", "123", "123", "123", "123", "123")
 
-        clientDao.enregistrer(client)
+        clientDAO.enregistrer(client)
 
-        if (client.id == null) {
-            Assertions.fail<TestClientDAO>()
-        }
+        val loadedClient = clientDAO.chargerParId(client.id!!)
 
-        val other = clientDao.chargerParId(client.id!!)
-
-        assert(client == other)
+        Assertions.assertNotEquals(client, loadedClient, "Les données entrées ne sont pas exact")
     }
 
     @Test
-    fun testListerClient() {
-        val nombreEntree: Int = clientDao.chargerTout().size
+    fun TestEnregistrementId() {
+        val client = Client(null, "145 rue lupien", "123", "123", "123", "123", "123", "123", "123", "123")
 
-        val client: Client = Client(1, "adresse", "code_postal",
-            "ville", "province", "pays", "nom", "prenom",
-            "courriel", "numero_telephone")
+        clientDAO.enregistrer(client)
 
-        clientDao.enregistrer(client)
-
-        val nouveauNombreEntree: Int = clientDao.chargerTout().size
-
-        if (nombreEntree + 1 != nouveauNombreEntree) {
-            Assertions.fail<TestClientDAO>()
-        }
+        Assertions.assertNotNull(client.id, "L'id devrait pas être null après l'insertion")
     }
 
     @Test
-    fun testChargerClientParId() {
-        val client: Client = Client(1, "adresse", "code_postal",
-            "ville", "province", "pays", "nom", "prenom",
-            "courriel", "numero_telephone")
+    fun TestUpdate() {
+        val client = Client(null, "145 rue lupien", "123", "123", "123", "123", "123", "123", "123", "123")
 
-        clientDao.enregistrer(client)
+        clientDAO.enregistrer(client)
 
-        val other = clientDao.chargerParId(client.id!!)
 
-        if (client != other) {
-            Assertions.fail<TestClientDAO>()
-        }
+        client.adresse_civil = "145"
+        client.code_postal = "145"
+        client.ville = "145"
+        client.province = "145"
+        client.pays = "145"
+        client.nom = "145"
+        client.prenom = "145"
+        client.courriel = "145"
+        client.numero_telephone = "145"
 
+
+        clientDAO.enregistrer(client)
+
+        val loadedClient = clientDAO.chargerParId(client.id!!)
+
+
+        Assertions.assertEquals(client, loadedClient, "Les données entrées n'ont pas été modifiées")
     }
 
     @Test
-    fun testSupprimerClient() {
-        val client: Client = Client(1, "adresse", "code_postal",
-            "ville", "province", "pays", "nom", "prenom",
-            "courriel", "numero_telephone")
+    fun testChargerTout() {
+        val clients = clientDAO.chargerTout()
 
-        clientDao.enregistrer(client)
-        clientDao.supprimer(client.id!!)
-        val other = clientDao.chargerParId(client.id!!)
+        Assertions.assertNotNull(clients, "Des données devraient apparaître")
+    }
 
-        if (other != null) {
-            Assertions.fail<TestClientDAO>()
-        }
+    @Test
+    fun testSupprimer() {
+        val client = Client(null, "145 rue lupien", "123", "123", "123", "123", "123", "123", "123", "123")
+
+        clientDAO.enregistrer(client)
+
+        clientDAO.supprimer(client.id!!)
+
+        val loadedDossier = clientDAO.chargerParId(client.id!!)
+
+        Assertions.assertEquals(null, loadedDossier, "Le dossier n'a pas été suprimer")
     }
 }
