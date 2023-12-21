@@ -24,9 +24,10 @@ class TestTacheDossierDAO {
     fun testEnregistrer() {
         val role = Role(null, "testEmployeEnregistrer")
         val employe = Employe(null, "nom", "prenom", "mdp", role, "courriel")
-        val client = Client(null, "adress", "codePostal", "ville", "province", "pays", "nom", "prenom", "courriel", "tel")
+        val client =
+            Client(null, "adress", "codePostal", "ville", "province", "pays", "nom", "prenom", "courriel", "tel")
         val dossier = Dossier(null, client, "nomDossier")
-        val tacheDossier = TacheDossier(null, dossier, employe, "nomTache", Timestamp(2345), Time(2345),0.0f)
+        val tacheDossier = TacheDossier(null, dossier, employe, "nomTache", Timestamp(0), Time(2345), 0.0f)
 
         tacheDossierDAO.enregistrer(tacheDossier)
 
@@ -36,7 +37,7 @@ class TestTacheDossierDAO {
         var loadedTacheDossier = tacheDossierDAO.chargerParId(tacheDossier.id!!)
 
         // Sixième test
-        Assertions.assertNotEquals(tacheDossier, loadedTacheDossier, "Les données entrées ne sont pas exact")
+        Assertions.assertEquals(tacheDossier, loadedTacheDossier, "Les données entrées ne sont pas exact")
 
         tacheDossier.nom_tache = "nomTache34"
         tacheDossier.duree = Time(234235)

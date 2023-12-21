@@ -20,9 +20,11 @@ class TestClientDAO {
 
     @Test
     fun testEnregistrerClient() {
-        val client: Client = Client(1, "adresse", "code_postal",
+        val client: Client = Client(
+            null, "adresse", "code_postal",
             "ville", "province", "pays", "nom", "prenom",
-            "courriel", "numero_telephone")
+            "courriel", "numero_telephone"
+        )
 
         clientDao.enregistrer(client)
 
@@ -39,9 +41,11 @@ class TestClientDAO {
     fun testListerClient() {
         val nombreEntree: Int = clientDao.chargerTout().size
 
-        val client: Client = Client(1, "adresse", "code_postal",
+        val client: Client = Client(
+            null, "adresse", "code_postal",
             "ville", "province", "pays", "nom", "prenom",
-            "courriel", "numero_telephone")
+            "courriel", "numero_telephone"
+        )
 
         clientDao.enregistrer(client)
 
@@ -54,27 +58,39 @@ class TestClientDAO {
 
     @Test
     fun testChargerClientParId() {
-        val client: Client = Client(1, "adresse", "code_postal",
+        val client: Client = Client(
+            null, "adresse", "code_postal",
             "ville", "province", "pays", "nom", "prenom",
-            "courriel", "numero_telephone")
+            "courriel", "numero_telephone"
+        )
 
         clientDao.enregistrer(client)
+
+        if (client.id == null) {
+            Assertions.fail<TestClientDAO>()
+        }
 
         val other = clientDao.chargerParId(client.id!!)
 
         if (client != other) {
             Assertions.fail<TestClientDAO>()
         }
-
     }
 
     @Test
     fun testSupprimerClient() {
-        val client: Client = Client(1, "adresse", "code_postal",
+        val client: Client = Client(
+            null, "adresse", "code_postal",
             "ville", "province", "pays", "nom", "prenom",
-            "courriel", "numero_telephone")
+            "courriel", "numero_telephone"
+        )
 
         clientDao.enregistrer(client)
+
+        if (client.id == null) {
+            Assertions.fail<TestClientDAO>()
+        }
+
         clientDao.supprimer(client.id!!)
         val other = clientDao.chargerParId(client.id!!)
 

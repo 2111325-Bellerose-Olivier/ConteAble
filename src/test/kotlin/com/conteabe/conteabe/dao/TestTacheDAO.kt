@@ -22,7 +22,7 @@ class TestTacheDAO {
 
     @Test
     fun testEnregistrer() {
-        val tache = Tache(null, "nom_tache", 0.0f)
+        var tache = Tache(null, "nom_tache", 0.0f)
 
         tacheDAO.enregistrer(tache)
 
@@ -32,9 +32,10 @@ class TestTacheDAO {
         var other = tacheDAO.chargerParId(tache.id!!)
 
         //Deuxième test
-        assertNotEquals(tache, other, "Les données entrées ne sont pas exact")
+        assertEquals(tache, other, "Les données entrées ne sont pas exact")
 
-        tacheDAO.enregistrer(Tache(tache.id, "nom_tache_modifier", 1.0f))
+        tache = Tache(tache.id, "nom_tache_modifier", 1.0f)
+        tacheDAO.enregistrer(tache)
 
         other = tacheDAO.chargerParId(tache.id!!)
 
