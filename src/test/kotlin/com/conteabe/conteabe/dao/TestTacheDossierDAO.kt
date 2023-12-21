@@ -26,7 +26,7 @@ class TestTacheDossierDAO {
         val client = Client(null, "adress", "codePostal", "ville", "province", "pays", "nom", "prenom", "courriel", "tel")
         val dossier = Dossier(null, client, "nomDossier")
         val tacheDossier = TacheDossier(null, dossier, employe, "nomTache", Time(2345), 0.0f)
-        
+
         tacheDossierDAO.enregistrer(tacheDossier)
 
         // Cinquième test
