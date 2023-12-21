@@ -126,4 +126,19 @@ class TacheController(private val contexte: Contexte) {
         taches = FilteredList(FXCollections.observableList(tacheDAO.chargerTout()))
         listeTaches.items = taches
     }
+
+    @FXML
+    private fun ajoutDossier(){
+        contexte.SetPage(Page.AjouterDossier)
+    }
+
+    @FXML
+    private fun ajoutTemps(){
+        contexte.SetPage(Page.AjoutHeures)
+    }
+
+    @FXML
+    private fun rapportTemps(){
+        contexte.SetPage(Page.RapportHeures)
+    }
 }

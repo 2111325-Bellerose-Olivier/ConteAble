@@ -4,8 +4,6 @@ import com.conteabe.conteabe.dao.EmployeDAO
 import com.conteabe.conteabe.modele.Employe
 import com.conteabe.conteabe.service.ServiceBD
 import javafx.fxml.FXML
-import javafx.fxml.FXMLLoader
-import javafx.scene.Parent
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import org.mindrot.jbcrypt.BCrypt

@@ -52,6 +52,7 @@ CREATE TABLE Tache_Dossier (
   id_dossier INTEGER,
   id_employe INTEGER,
   nom_tache varchar(255),
+  debut timestamp,
   duree time,
   montant float(6,2),
   CONSTRAINT fk_dossier FOREIGN KEY (id_dossier) REFERENCES Dossier(id),

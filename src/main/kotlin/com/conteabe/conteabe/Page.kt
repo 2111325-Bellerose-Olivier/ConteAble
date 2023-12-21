@@ -1,6 +1,9 @@
 package com.conteabe.conteabe
 
+
 import AjoutHeure
+import com.conteabe.conteabe.GererClient.AjouterClientController
+import com.conteabe.conteabe.GererClient.ModifierClientController
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.primaryConstructor
 
@@ -49,5 +52,20 @@ enum class Page(val view: String, val constructor: KFunction<*>) {
     AjoutHeures(
         "ajout-heure.fxml",
         AjoutHeure::class.primaryConstructor!!
-    )
+    ),
+    Client(
+        "client-view.fxml",
+        ClientController::class.primaryConstructor!!
+    ),
+    AjouterClient(
+    "client-ajouter.fxml",
+        AjouterClientController::class.primaryConstructor!!
+    ),
+    ModifierClient(
+        "client-modifier.fxml",
+        ModifierClientController::class.primaryConstructor!!
+    ),
+
+
+
 }

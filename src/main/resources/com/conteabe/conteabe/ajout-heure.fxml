@@ -19,6 +19,7 @@
 <?import javafx.scene.control.SpinnerValueFactory?>
 <?import javafx.scene.control.TextField?>
 
+<?import javafx.scene.control.DatePicker?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx">
 
 
@@ -50,14 +51,10 @@
             </TableView>
         </VBox>
         <VBox spacing="10.0">
+            <Button text="Retour" onAction="#retour"/>
             <Text lineSpacing="20.0">Ajouter heure employé</Text>
 
-            <Label text="Nom tâche*"/>
-            <TextField fx:id="nomTacheAjout"/>
-
-            <Label text="Id dossier*"/>
-            <IntegerField fx:id="idDossierAjout"/>
-
+            <DatePicker fx:id="dateDebut"/>
 
             <!-- Code emprunté de ChatGPT -->
             <!-- Source: "https://chat.openai.com" -->
@@ -92,11 +89,7 @@
             </HBox>
             <!-- Fin code emprunter -->
 
-            <Label text="Montant*"/>
-            <DoubleField fx:id="montantAjouter"/>
-
-            <Label fx:id="Ajouter"/>
-            <Button text="Ajouter!" onAction="#ajouter"/>
+            <Button fx:id="Ajouter" text="Ajouter!" onAction="#ajouter"/>
         </VBox>
     </HBox>
 </VBox>
