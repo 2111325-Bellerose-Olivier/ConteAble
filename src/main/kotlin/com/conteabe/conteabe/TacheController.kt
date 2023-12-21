@@ -128,6 +128,11 @@ class TacheController(private val contexte: Contexte) {
     }
 
     @FXML
+    private fun ajoutDossier(){
+        contexte.SetPage(Page.AjouterDossier)
+    }
+
+    @FXML
     private fun ajoutTemps(){
         contexte.SetPage(Page.AjoutHeures)
     }
