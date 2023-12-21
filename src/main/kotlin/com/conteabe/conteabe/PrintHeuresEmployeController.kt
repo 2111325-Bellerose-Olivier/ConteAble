@@ -79,7 +79,7 @@ class PrintHeuresEmployeController(
                     (tache.duree.time / 1_000) % 60
                 ),
                 tache.nom_tache,
-                "%.2f$/h".format(3_600_000f * tache.montant / tache.duree.time),
+                "%.2f$/h".format((3_600_000f * tache.montant) / tache.duree.time),
                 "%.2f$".format(tache.montant)
             )
         })
