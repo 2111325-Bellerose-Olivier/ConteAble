@@ -5,8 +5,6 @@ import com.conteabe.conteabe.modele.Role
 import com.conteabe.conteabe.service.ServiceBD
 import java.sql.PreparedStatement
 import java.sql.ResultSet
-import java.sql.SQLException
-import java.sql.Statement
 
 
 /**
@@ -90,7 +88,8 @@ class EmployeDAO(serviceBD: ServiceBD) : DAOAbstraite<Employe>(serviceBD) {
         val requete: PreparedStatement =
             connexion.prepareStatement("DELETE FROM Employe WHERE id= ?")
         requete.setInt(1, id)
-        val resultats: ResultSet = requete.executeQuery()
+
+        requete.executeUpdate()
 
         serviceBD.fermerConnexion()
 
