@@ -80,6 +80,13 @@ class DossierDAO(serviceBD: ServiceBD) : DAOAbstraite<Dossier>(serviceBD) {
     }
 
     override fun supprimer(id: Int): Boolean {
-        return false;
+        val connexion = serviceBD.ouvrirConnexion()
+        val requete = connexion.prepareStatement("DELETE FROM Dossier WHERE id=?;")
+        requete.setInt(1, id)
+
+        requete.executeUpdate()
+
+        serviceBD.fermerConnexion()
+        return true
     }
 }

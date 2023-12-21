@@ -53,7 +53,7 @@ class TestDossierDAO {
 
         dossierDAO.enregistrer(dossier)
 
-        val loadedDossier = dossierDAO.chargerParId(client.id!!)
+        val loadedDossier = dossierDAO.chargerParId(dossier.id!!)
 
         Assertions.assertEquals(dossier, loadedDossier, "Les données entrées n'ont pas été modifiées")
     }
