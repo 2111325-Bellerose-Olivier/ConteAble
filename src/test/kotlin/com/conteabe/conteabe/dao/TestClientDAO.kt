@@ -26,7 +26,7 @@ class TestClientDAO {
 
         val loadedClient = clientDAO.chargerParId(client.id!!)
 
-        Assertions.assertNotEquals(client, loadedClient, "Les données entrées ne sont pas exact")
+        Assertions.assertEquals(client, loadedClient, "Les données entrées ne sont pas exact")
     }
 
     @Test
