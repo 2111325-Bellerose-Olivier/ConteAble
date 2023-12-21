@@ -134,15 +134,6 @@ class AjoutHeure(private val contexte: Contexte) {
 
         val duree = Duration.between(heureDebut, heureFin)
 
-        val totalSeconds = duree.seconds
-
-        val hours = totalSeconds / 3600
-        val minutes = (totalSeconds % 3600) / 60
-        val seconds = totalSeconds % 60
-
-        val time = Time.valueOf(String.format("%02d:%02d:%02d", hours, minutes, seconds))
-
-
         val tacheDossierDAO = TacheDossierDAO(contexte.services.getService<ServiceBD>() as ServiceBD)
         val dossierDAO = DossierDAO(contexte.services.getService<ServiceBD>() as ServiceBD)
         val employeDAO = EmployeDAO(contexte.services.getService<ServiceBD>() as ServiceBD)
@@ -167,7 +158,7 @@ class AjoutHeure(private val contexte: Contexte) {
                 heureDebut.atDate(
                     dateDebut.value
                 )
-            ), time, totalSeconds.toFloat() / 3600f * tache.taux
+            ), Time(duree.toMillis()), duree.seconds.toFloat() / 3600f * tache.taux
         )
         tacheDossierDAO.enregistrer(tacheDossier)
     }
