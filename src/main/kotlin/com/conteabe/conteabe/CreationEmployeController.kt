@@ -70,6 +70,6 @@ class CreationEmployeController(private val contexte: Contexte) {
         }
 
         contexte.employeConnecte = employe
-        contexte.SetPage(Page.Hello)
+        contexte.SetPage(Page.Tache)
     }
 }
